@@ -1,0 +1,31 @@
+// plugins
+plugins {
+    id 'java'
+    id 'idea'
+}
+
+// java compatibility
+def myCompatibility = 8
+
+// project version
+version = '1.0'
+
+// compatibility
+compileJava {
+    sourceCompatibility = "${myCompatibility}"
+    targetCompatibility = "${myCompatibility}"
+}
+
+// dependencies
+dependencies {
+    String LIB_JDBC = "${System.env.ORACLE_HOME_180}/jdbc/lib"
+    println "jdbc library: [${LIB_JDBC}]"
+    compile fileTree(dir: "${LIB_JDBC}", includes:  ["ojdbc8*.jar"])
+}
+
+// idea
+idea {
+    project {
+        languageLevel = "${myCompatibility}"
+    }
+}
