@@ -66,7 +66,7 @@ class GvSystemEvents {
         //
         if (systemEvent.getTotalWaitsDiff() != 0) {
             timeouts = (double) systemEvent.getTotalTimeoutsDiff() / (double) systemEvent.getTotalWaitsDiff();
-            timeWaited = (double) 10 * (double) systemEvent.getTimeWaitedDiff() / (double) systemEvent.getTotalWaitsDiff();
+            timeWaited = (double) systemEvent.getTimeWaitedDiff() / (double) 10 / (double) systemEvent.getTotalWaitsDiff();
         }
 
         //
