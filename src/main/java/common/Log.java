@@ -1,6 +1,7 @@
 package common;
 
 
+import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -9,7 +10,7 @@ import java.util.Date;
  */
 public class Log {
 
-    public static final String EOL = "\n\r";
+    public static final String EOL = System.lineSeparator();
 
     //
     private static final SimpleDateFormat s =
@@ -22,12 +23,21 @@ public class Log {
 
     //
     public static void println(Object o) {
-        System.out.println(getLinePrefix() + o);
+        _println(o, System.out);
     }
 
     //
     public static void errPrintln(Object o) {
-        System.err.println(getLinePrefix() + o);
+        _println(o, System.err);
+    }
+
+    //
+    private static void _println(Object o, PrintStream stream) {
+        String[] lines = o.toString().split("\\n");
+        String prefix = getLinePrefix();
+        for (String line : lines) {
+            stream.println(prefix + line);
+        }
     }
 
     //
