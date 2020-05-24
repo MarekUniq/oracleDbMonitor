@@ -4,6 +4,7 @@ import common.CommandLineArgument;
 import common.Database;
 import common.Log;
 import common.Str;
+import oracle.jdbc.internal.OracleConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -48,6 +49,11 @@ public class DbConnection {
     }
 
     //
+    private short getDbVersion() throws SQLException {
+        return ((OracleConnection) connection).getVersionNumber();
+    }
+
+    //
     public DbConnection() throws Exception {
         //
         connection = Database.getConnection(CommandLineArgument.getUrl(), CommandLineArgument.getUsername(), CommandLineArgument.getPassword());
@@ -64,7 +70,10 @@ public class DbConnection {
 
         // instance parameters
         gv_parameter = connection.prepareStatement("select inst_id, name, value from gv$parameter where name in ('cpu_count', 'db_block_size')");
-        gv_instance = connection.prepareStatement("select i.inst_id, i.host_name, i.version, (sysdate - i.startup_time)*24*60*60 startup_time from gv$instance i");
+        if (getDbVersion() >= 18000)
+            gv_instance = connection.prepareStatement("select i.inst_id, i.host_name, i.version_full as version, (sysdate - i.startup_time)*24*60*60 startup_time from gv$instance i");
+        else
+            gv_instance = connection.prepareStatement("select i.inst_id, i.host_name, i.version, (sysdate - i.startup_time)*24*60*60 startup_time from gv$instance i");
         gv_pgastat = connection.prepareStatement("select inst_id, name, value from gv$pgastat where name = 'total PGA allocated'");
         gv_sgainfo = connection.prepareStatement("select inst_id, name, bytes from gv$sgainfo where name IN ('Buffer Cache Size','Shared Pool Size','Large Pool Size','Free SGA Memory Available','Shared IO Pool Size')");
 
