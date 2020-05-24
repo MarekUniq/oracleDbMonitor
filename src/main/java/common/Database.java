@@ -18,15 +18,16 @@ public class Database {
         // get connect
         // Load the Oracle JDBC driver
         DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+        Log.println(String.format("getDriverVersion(): [%s]", oracle.jdbc.OracleDriver.getDriverVersion()));
 
         // Connect to the database
         Log.println("jdbc: " + CommandLineArgument.getUsername() + "@" + CommandLineArgument.getUrl());
         Connection connection = DriverManager.getConnection(url, username, password);
 
         // print list of drivers
-        Enumeration e = DriverManager.getDrivers();
+        Enumeration<Driver> e = DriverManager.getDrivers();
         while (e.hasMoreElements()) {
-            Driver d = (Driver) e.nextElement();
+            Driver d = e.nextElement();
             Log.println("Class for Oracle JDBC Driver: [" + d.getClass() + "]");
         }
 
