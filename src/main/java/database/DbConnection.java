@@ -66,7 +66,7 @@ public class DbConnection {
         GvStatnames.loadStatisticNameMapping(connection);
 
         // database parameters
-        gv_database = connection.prepareStatement("select to_char(systimestamp,'yyyy-mm-dd hh24:mi:ss') systimestamp, name, log_mode, platform_name, force_logging, flashback_on from gv$database");
+        gv_database = connection.prepareStatement("select name, log_mode, platform_name, force_logging, flashback_on from gv$database");
 
         // instance parameters
         gv_parameter = connection.prepareStatement("select inst_id, name, value from gv$parameter where name in ('cpu_count', 'db_block_size')");
@@ -82,8 +82,8 @@ public class DbConnection {
         gv_system_event = connection.prepareStatement("select inst_id, event, total_waits, total_timeouts, time_waited from gv$system_event where event in ('db file scattered read','db file sequential read','log file sync')");
 
         // session info
-        my_session = connection.prepareStatement("select SYS_CONTEXT('USERENV', 'INSTANCE') INST_ID, SYS_CONTEXT('USERENV', 'SID') SID from dual");
-        gv_session = connection.prepareStatement("select inst_id, saddr, sid, serial#, username, status, osuser, machine, terminal, program, type, sql_id, module, action, (sysdate - logon_time)*24*60*60 logon_time, last_call_et, event, wait_class, seconds_in_wait, state, blocking_instance, blocking_session from gv$session");
+        my_session = connection.prepareStatement("select SYS_CONTEXT('USERENV', 'INSTANCE') as INST_ID, SYS_CONTEXT('USERENV', 'SID') as SID, sysdate from dual");
+        gv_session = connection.prepareStatement("select inst_id, saddr, sid, serial#, username, status, osuser, machine, terminal, program, type, sql_id, module, action, logon_time, last_call_et, event, wait_class, seconds_in_wait, state, blocking_instance, blocking_session from gv$session");
         gv_px_session = connection.prepareStatement("select inst_id, sid, serial#, qcinst_id, qcsid, qcserial#, server_set from gv$px_session");
         gv_session_longops = connection.prepareStatement("select rownum as rownum_for_pk, inst_id, sid, serial#, opname, target, sofar, totalwork, units, (sysdate - start_time)*24*60*60 start_time, time_remaining, sql_id from gv$session_longops where sofar <> totalwork");
         String statisticInList = GvStatnames.getStatisticInList();
@@ -106,6 +106,7 @@ public class DbConnection {
             rs.next();
             MySession.setInstId(rs.getString("INST_ID"));
             MySession.setSid(rs.getString("SID"));
+            MySession.setSysdate(rs.getTimestamp("SYSDATE"));
         }
 
         // load parameters
@@ -287,8 +288,15 @@ public class DbConnection {
     public void getOutputDatabase(StringBuffer sb) throws Exception {
         //
         ResultSet rs = gv_database.executeQuery();
+        List<ArrayList> listDatabase = new ArrayList<>();
         //
-        List<ArrayList> listDatabase = Str.convertResultSetToListArray(rs);
+        ArrayList<Object> sysdate = new ArrayList<>(2);
+        sysdate.add("SYSDATE");
+        sysdate.add(MySession.getSysdateFormatted());
+        listDatabase.add(sysdate);
+        //
+        List<ArrayList> resultSetList = Str.convertResultSetToListArray(rs);
+        listDatabase.addAll(resultSetList);
         //
         ArrayList<Object> dbBlockSize = new ArrayList<>(2);
         dbBlockSize.add(GvParameter.NAME.db_block_size.name());

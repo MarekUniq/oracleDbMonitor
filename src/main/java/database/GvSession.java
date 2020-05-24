@@ -4,6 +4,8 @@ import common.Str;
 import telnetServer.TelnetSession;
 
 import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,7 +125,7 @@ public class GvSession {
 //  private String rowWaitRow;            // NUMBER
 //  private String topLevelCall;            // NUMBER
 //  private String logonTime;            // DATE
-    private int logonTime;            // DATE
+    private Timestamp logonTime;            // DATE
     private long lastCallEt;            // NUMBER
     //  private String pdmlEnabled;            // VARCHAR2
 //  private String failoverType;            // VARCHAR2
@@ -330,11 +332,15 @@ public class GvSession {
         this.action = action;
     }
 
-    public int getLogonTime() {
+    public Timestamp getLogonTime() {
         return logonTime;
     }
 
-    void setLogonTime(int logonTime) {
+    public long getLogonTimeSeconds() {
+        return Duration.between(logonTime.toInstant(), MySession.getSysdate().toInstant()).getSeconds();
+    }
+
+    void setLogonTime(Timestamp logonTime) {
         this.logonTime = logonTime;
     }
 
@@ -478,7 +484,7 @@ public class GvSession {
         setSqlId(rs.getString(getColumnName(SQL_ID)));
         setModule(rs.getString(getColumnName(MODULE)));
         setAction(rs.getString(getColumnName(ACTION)));
-        setLogonTime(rs.getInt(getColumnName(LOGON_TIME)));
+        setLogonTime(rs.getTimestamp(getColumnName(LOGON_TIME)));
         setLastCallEt(rs.getLong(getColumnName(LAST_CALL_ET)));
         setEvent(rs.getString(getColumnName(EVENT)));
         setWaitClass(rs.getString(getColumnName(WAIT_CLASS)));

@@ -164,7 +164,7 @@ class GvSessions {
             sessionArray[colNum++][rowNum] = session.getSqlId();
             sessionArray[colNum++][rowNum] = Str.rtrunc(session.getModule(), 15);
             sessionArray[colNum++][rowNum] = Str.rtrunc(session.getAction(), 15);
-            sessionArray[colNum++][rowNum] = Str.formatSecondsNumber(session.getLogonTime());
+            sessionArray[colNum++][rowNum] = Str.formatSecondsNumber(session.getLogonTimeSeconds());
             sessionArray[colNum++][rowNum] = Str.formatSecondsNumber(session.getLastCallEt());
             sessionArray[colNum++][rowNum] = Str.formatSecondsNumber(session.getSecondsInWait());
             sessionArray[colNum++][rowNum] = GvSesstats.getSessionIOStats(session);
