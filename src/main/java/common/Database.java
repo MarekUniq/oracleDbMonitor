@@ -21,7 +21,7 @@ public class Database {
         Log.println(String.format("getDriverVersion(): [%s]", oracle.jdbc.OracleDriver.getDriverVersion()));
 
         // Connect to the database
-        Log.println("jdbc: " + CommandLineArgument.getUsername() + "@" + CommandLineArgument.getUrl());
+        Log.println(String.format("jdbc: %s/***@%s", username, url));
         Connection connection = DriverManager.getConnection(url, username, password);
 
         // print list of drivers
