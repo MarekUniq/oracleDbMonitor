@@ -83,7 +83,7 @@ public class DbConnection {
 
         // session info
         my_session = connection.prepareStatement("select SYS_CONTEXT('USERENV', 'INSTANCE') as INST_ID, SYS_CONTEXT('USERENV', 'SID') as SID, sysdate from dual");
-        gv_session = connection.prepareStatement("select inst_id, saddr, sid, serial#, username, status, osuser, machine, terminal, program, type, sql_id, module, action, logon_time, last_call_et, event, wait_class, seconds_in_wait, state, blocking_instance, blocking_session from gv$session");
+        gv_session = connection.prepareStatement("select inst_id, saddr, sid, serial#, username, status, osuser, machine, terminal, program, type, sql_id, module, action, logon_time, last_call_et, event, wait_class, seconds_in_wait, state, blocking_instance, blocking_session, con_id from gv$session");
         gv_px_session = connection.prepareStatement("select inst_id, sid, serial#, qcinst_id, qcsid, qcserial#, server_set from gv$px_session");
         gv_session_longops = connection.prepareStatement("select rownum as rownum_for_pk, inst_id, sid, serial#, opname, target, sofar, totalwork, units, (sysdate - start_time)*24*60*60 start_time, time_remaining, sql_id from gv$session_longops where sofar <> totalwork");
         String statisticInList = GvStatnames.getStatisticInList();

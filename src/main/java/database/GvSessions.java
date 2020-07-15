@@ -116,7 +116,7 @@ class GvSessions {
         //
         // Math.min() allows to restrict # of lines if there are too many
         int rowCount = 1 + Math.min(sessionList.size(), maxActiveSessionsRows);
-        int columnCount = 13;
+        int columnCount = 14;
         int[] alignment = new int[columnCount];
         //
         int colNum = 0;
@@ -124,6 +124,8 @@ class GvSessions {
         String[][] sessionArray = new String[columnCount][rowCount];
 
         // Column Names
+        alignment[colNum] = Str.ALIGNMENT_RIGHT;
+        sessionArray[colNum++][rowNum] = GvSession.columnNames[GvSession.CON_ID].substring(0, 3);
         alignment[colNum] = Str.ALIGNMENT_LEFT;
         sessionArray[colNum++][rowNum] = "SES_REF";
         alignment[colNum] = Str.ALIGNMENT_LEFT;
@@ -156,6 +158,7 @@ class GvSessions {
             GvSession session = sessionList.get(i);
             colNum = 0;
             rowNum = i + 1;
+            sessionArray[colNum++][rowNum] = session.getConId();
             sessionArray[colNum++][rowNum] = session.getAlterSystemKillSessionReference();
             sessionArray[colNum++][rowNum] = session.getUsername();
             sessionArray[colNum++][rowNum] = Str.rtrunc(session.getOsuser(), 15);

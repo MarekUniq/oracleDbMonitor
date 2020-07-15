@@ -40,6 +40,7 @@ public class GvSession {
     static final int STATE = 19;
     private static final int BLOCKING_INSTANCE = 20;
     private static final int BLOCKING_SESSION = 21;
+    static final int CON_ID = 22;
 
     //
     static final String[] columnNames = {
@@ -65,6 +66,7 @@ public class GvSession {
             , "STATE"
             , "BLOCKING_INSTANCE"
             , "BLOCKING_SESSION"
+            , "CON_ID"
     };
 
     //
@@ -180,6 +182,12 @@ public class GvSession {
 //  private String creatorAddr;            // RAW
 //  private String creatorSerial;            // NUMBER
 //  private String ecid;            // VARCHAR2
+//  private String sqlTranslationProfileId;            // NUMBER
+//  private String pgaTunableMem;            // NUMBER
+//  private String shardDdlStatus;            // VARCHAR2
+private String conId;            // NUMBER
+//  private String externalName;            // VARCHAR2
+//  private String plsqlDebuggerConnected;            // VARCHAR2
 
     // flag: Session is Parallel Query Slave
     private boolean isParallelQuerySlave = false;
@@ -407,6 +415,15 @@ public class GvSession {
         this.state = state;
     }
 
+    String getConId() {
+        return conId;
+    }
+
+    void setConId(String conId) {
+        this.conId = conId;
+    }
+
+    //
     public GvSession getBlockingGvSession() {
         return blockingGvSession;
     }
@@ -493,6 +510,7 @@ public class GvSession {
         setState(rs.getString(getColumnName(STATE)));
         setBlockingInstance(rs.getString(getColumnName(BLOCKING_INSTANCE)));
         setBlockingSession(rs.getString(getColumnName(BLOCKING_SESSION)));
+        setConId(rs.getString(getColumnName(CON_ID)));
     }
 
 
