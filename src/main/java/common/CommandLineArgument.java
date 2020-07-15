@@ -18,8 +18,8 @@ public class CommandLineArgument {
     }
 
     //
-    private static int updateInterval; // in milli-seconds
-    private static String listeningHostName;
+    private static int updateInterval = 30000; // in milli-seconds, default: 30 sec
+    private static String listeningHostName = "localhost";
     private static int listeningHostPort;
     private static String username;
     private static String password;
