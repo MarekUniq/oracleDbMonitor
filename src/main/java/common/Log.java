@@ -33,7 +33,7 @@ public class Log {
 
     //
     private static void _println(Object o, PrintStream stream) {
-        String[] lines = o.toString().split("\\n");
+        String[] lines = o.toString().split(EOL);
         String prefix = getLinePrefix();
         for (String line : lines) {
             stream.println(prefix + line);

@@ -1,6 +1,7 @@
 package database;
 
 import common.CommandLineArgument;
+import common.Log;
 import common.Str;
 
 import java.sql.ResultSet;
@@ -115,13 +116,13 @@ class GvSessionLongops {
         }
 
         //
-//    sb.append("\n\r");
         sb.append("Long operations: " + sessionLongopsMapByPrimaryKey.size()
                 + ((maxLongOperationsRows == Integer.MAX_VALUE) ? "" : " limit: " + maxLongOperationsRows)
                 + " / gv$session_longops"
-                + " (" + getFetchTime() + "ms)\n\r");
+                + " (" + getFetchTime() + "ms)");
+        sb.append(Log.EOL);
         Str.convertArrayToStringBufferAsTable(sessionLongopArray, alignment, sb);
-        sb.append("\n\r");
+        sb.append(Log.EOL);
     }
 
     //

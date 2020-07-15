@@ -182,7 +182,7 @@ public class TelnetSession implements Runnable {
                     + " | clnt: " + sessionSocket.getRemoteSocketAddress()
                     + " | srv: " + sessionSocket.getLocalSocketAddress()
                     + " | url: " + CommandLineArgument.getUrl()
-                    + "\n\r"
+                    + Log.EOL
             ));
 
             //

@@ -172,17 +172,16 @@ class GvSessions {
         }
 
         //
-//    sb.append("\n\r");
         sb.append("Active Sessions: " + (sessionList.size())
                 + ((maxActiveSessionsRows == Integer.MAX_VALUE) ? "" : " limit: " + maxActiveSessionsRows)
                 + " / session,px_session,sesstat"
                 + " (" + getFetchTime() + "ms"
                 + "," + getGvPxSessionsFetchTime() + "ms"
                 + "," + GvSesstats.getGvSesstatFetchTime() + "ms"
-                + ") / Total sessions: " + sessionsMapByPrimaryKey.size()
-                + "\n\r");
+                + ") / Total sessions: " + sessionsMapByPrimaryKey.size());
+        sb.append(Log.EOL);
         Str.convertArrayToStringBufferAsTable(sessionArray, alignment, sb);
-        sb.append("\n\r");
+        sb.append(Log.EOL);
     }
 
 
@@ -223,8 +222,9 @@ class GvSessions {
 
     //
     public static void getBlockingTree(StringBuffer sb) {
-//    sb.append("\n\r");
-        sb.append("Blocking Sessions / gv$session\n\r");
+        //
+        sb.append("Blocking Sessions / gv$session");
+        sb.append(Log.EOL);
         //
         GvSession.printBlockingTreeRowHeader(sb);
         //
@@ -237,7 +237,7 @@ class GvSessions {
 
         //
 //    Str.convertArrayToStringBufferAsTable(sessionArray, alignment, sb);
-        sb.append("\n\r");
+        sb.append(Log.EOL);
     }
 
     //

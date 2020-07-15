@@ -62,7 +62,7 @@ public class Str {
             sb.append(col.get(1));
             sb.append(TelnetSession.COLOR_RESET);
         }
-        sb.append("\n\r");
+        sb.append(Log.EOL);
     }
 
     /*
@@ -131,7 +131,7 @@ public class Str {
                 else if (alignment[n] == ALIGNMENT_RIGHT)
                     sb.append(lpad(value, maxLen[n], ' '));
             }
-            sb.append("\n\r");
+            sb.append(Log.EOL);
             //
             sb.append(TelnetSession.COLOR_RESET);
         }

@@ -134,14 +134,13 @@ class GvTransactions {
         }
 
         //
-//    sb.append("\n\r");
         sb.append("Transactions: " + transactionsMapByPrimaryKey.size()
                 + ((maxTransactionsRows == Integer.MAX_VALUE) ? "" : " limit: " + maxTransactionsRows)
                 + " / gv$transaction"
-                + " (" + getFetchTime() + "ms)"
-                + "\n\r");
+                + " (" + getFetchTime() + "ms)");
+        sb.append(Log.EOL);
         Str.convertArrayToStringBufferAsTable(transactionArray, alignment, sb);
-        sb.append("\n\r");
+        sb.append(Log.EOL);
     }
 
 

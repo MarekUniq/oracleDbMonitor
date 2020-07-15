@@ -1,5 +1,6 @@
 package database;
 
+import common.Log;
 import common.Str;
 import telnetServer.TelnetSession;
 
@@ -530,7 +531,7 @@ public class GvSession {
     public static void printBlockingTreeRowHeader(StringBuffer sb) {
         sb.append(TelnetSession.GREEN);
         sb.append("SES_REF | USERNAME | LAST_CALL_ET | SQL_ID | SECONDS_IN_WAIT | EVENT");
-        sb.append("\n\r");
+        sb.append(Log.EOL);
         sb.append(TelnetSession.COLOR_RESET);
     }
 
@@ -541,8 +542,8 @@ public class GvSession {
                 .append(" | ").append(session.getLastCallEt())
                 .append(" | ").append(session.getSqlId())
                 .append(" | ").append(Str.formatSecondsNumber(session.getSecondsInWait()))
-                .append(" | ").append(session.getEvent())
-                .append("\n\r");
+                .append(" | ").append(session.getEvent());
+        sb.append(Log.EOL);
     }
 
 

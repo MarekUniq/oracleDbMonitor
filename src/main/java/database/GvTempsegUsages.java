@@ -125,13 +125,12 @@ class GvTempsegUsages {
         }
 
         //
-//    sb.append("\n\r");
         sb.append("Temporary Segment Usage: " + tempsegUsageMapByPrimaryKey.size()
                 + ((maxTempSegmentUsageRows == Integer.MAX_VALUE) ? "" : " limit: " + maxTempSegmentUsageRows)
                 + " / gv$tempseg_usage"
-                + " (" + getFetchTime() + "ms)"
-                + "\n\r");
+                + " (" + getFetchTime() + "ms)");
+        sb.append(Log.EOL);
         Str.convertArrayToStringBufferAsTable(tempsegArray, alignment, sb);
-        sb.append("\n\r");
+        sb.append(Log.EOL);
     }
 }

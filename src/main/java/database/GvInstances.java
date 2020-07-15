@@ -1,5 +1,6 @@
 package database;
 
+import common.Log;
 import common.Str;
 
 import java.sql.ResultSet;
@@ -115,13 +116,14 @@ class GvInstances {
         }
 
         //
-        sb.append("\n\r");
+        sb.append(Log.EOL);
         sb.append("Instances: " + instancesMapByPrimaryKey.size()
                 + " / instance,sysstat,system_event,pgastat,sgainfo (" + getFetchTime() + "ms," + GvSysstats.getFetchTime() + "ms," + GvSystemEvents.getFetchTime() + "ms,"
                 + GvPgastats.getFetchTime() + "ms," + GvSgainfos.getFetchTime() + "ms)"
-                + " / waits/timeouts/waited  bytes/totIOreq  recv/sent/trip\n\r");
+                + " / waits/timeouts/waited  bytes/totIOreq  recv/sent/trip");
+        sb.append(Log.EOL);
         Str.convertArrayToStringBufferAsTable(instanceArray, alignment, sb);
-        sb.append("\n\r");
+        sb.append(Log.EOL);
     }
 
 }
