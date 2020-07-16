@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -60,17 +61,14 @@ class GvStatnames {
         Log.println("Loaded statistic names: " + statnamesMapByPrimaryKey.size());
     }
 
-    public static String getStatisticInList() {
-        String retVal = null;
-        //
-        for (GvStatname gvStatname : statnamesMapByPrimaryKey.values()) {
-            if (retVal == null)
-                retVal = gvStatname.getStatistic();
-            else
-                retVal += ", " + gvStatname.getStatistic();
-        }
-        //
-        return retVal;
+    //
+    public static String getStatisticInList(String sqlTemplate) {
+        // in bigger databases "where statistic# in (1,2,3)" clause runs ~5 seconds because it does not use index
+        // statistics# column have index. "where statistic# = 1" and "union all" is workaround
+        // 19.7 was widely used at the time of writing
+        return statnamesMapByPrimaryKey.values().stream()
+                .map(gvStatname -> String.format(sqlTemplate, gvStatname.getStatistic()))
+                .collect(Collectors.joining(" union all "));
     }
 
 
