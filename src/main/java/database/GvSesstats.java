@@ -5,10 +5,8 @@ import common.Str;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -75,36 +73,36 @@ class GvSesstats {
 
     //
     public static String getSessionIOStats(GvSession session) {
-        String retVal = "";
+        //
+        String[] statsList = {
+                GvStatnames.PHYSICAL_READ_TOTAL_BYTES
+                , GvStatnames.PHYSICAL_READ_TOTAL_IO_REQUESTS
+                , GvStatnames.PHYSICAL_WRITE_TOTAL_BYTES
+                , GvStatnames.PHYSICAL_WRITE_TOTAL_IO_REQUESTS
+                , GvStatnames.REDO_SIZE
+                , GvStatnames.CPU_USED_BY_THIS_SESSION
+        };
+        //
+        return Arrays.stream(statsList)
+                .map(s -> getStatisticValue(session, s))
+                .map(Str::formatDoubleNumber)
+                .collect(Collectors.joining("/"));
+    }
+
+    //
+    public static double getStatisticValue(GvSession session, String statisticsName) {
         //
         double interval = CommandLineArgument.getUpdateIntervalInSeconds();
         //
-        String statistic = GvStatnames.getStatistic(session.getInstId(), GvStatnames.PHYSICAL_READ_TOTAL_BYTES);
+        String statistic = GvStatnames.getStatistic(session.getInstId(), statisticsName);
         String primaryKey = GvSesstat.getPrimaryKey(session.getInstId(), session.getSid(), statistic);
         GvSesstat gvSesstat = sesstatsMapByPrimaryKey.get(primaryKey);
-        retVal += (gvSesstat == null) ? "0" : Str.formatDoubleNumber((double) gvSesstat.getValueDiff() / interval);
         //
-        statistic = GvStatnames.getStatistic(session.getInstId(), GvStatnames.PHYSICAL_READ_TOTAL_IO_REQUESTS);
-        primaryKey = GvSesstat.getPrimaryKey(session.getInstId(), session.getSid(), statistic);
-        gvSesstat = sesstatsMapByPrimaryKey.get(primaryKey);
-        retVal += (gvSesstat == null) ? "/0" : "/" + Str.formatDoubleNumber((double) gvSesstat.getValueDiff() / interval);
-        //
-        statistic = GvStatnames.getStatistic(session.getInstId(), GvStatnames.PHYSICAL_WRITE_TOTAL_BYTES);
-        primaryKey = GvSesstat.getPrimaryKey(session.getInstId(), session.getSid(), statistic);
-        gvSesstat = sesstatsMapByPrimaryKey.get(primaryKey);
-        retVal += (gvSesstat == null) ? "/0" : "/" + Str.formatDoubleNumber((double) gvSesstat.getValueDiff() / interval);
-        //
-        statistic = GvStatnames.getStatistic(session.getInstId(), GvStatnames.PHYSICAL_WRITE_TOTAL_IO_REQUESTS);
-        primaryKey = GvSesstat.getPrimaryKey(session.getInstId(), session.getSid(), statistic);
-        gvSesstat = sesstatsMapByPrimaryKey.get(primaryKey);
-        retVal += (gvSesstat == null) ? "/0" : "/" + Str.formatDoubleNumber((double) gvSesstat.getValueDiff() / interval);
-        //
-        statistic = GvStatnames.getStatistic(session.getInstId(), GvStatnames.REDO_SIZE);
-        primaryKey = GvSesstat.getPrimaryKey(session.getInstId(), session.getSid(), statistic);
-        gvSesstat = sesstatsMapByPrimaryKey.get(primaryKey);
-        retVal += (gvSesstat == null) ? "/0" : "/" + Str.formatDoubleNumber((double) gvSesstat.getValueDiff() / interval);
-        //
-        return retVal;
+        if (GvStatnames.CPU_USED_BY_THIS_SESSION.equals(statisticsName))
+            // CPU time is reported "in 10s of milliseconds"
+            return gvSesstat == null ? 0 : (double) gvSesstat.getValueDiff() / interval / 100;
+        else
+            return gvSesstat == null ? 0 : (double) gvSesstat.getValueDiff() / interval;
     }
 
 }

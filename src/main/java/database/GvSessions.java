@@ -109,6 +109,9 @@ class GvSessions {
                 // active, non-idle wait class, not parallel query slave
             else if (session.getStatusIsActive() && !session.getWaitClass().equals(GvSession.WAIT_CLASS_IDLE) && !session.isParallelQuerySlave())
                 sessionList.add(session);
+                // if cpu average usage is bigger than 0.3 cpus
+            else if (GvSesstats.getStatisticValue(session, GvStatnames.CPU_USED_BY_THIS_SESSION) > .3d)
+                sessionList.add(session);
             else
                 /* do nothing */ ;
         }
@@ -149,7 +152,7 @@ class GvSessions {
         alignment[colNum] = Str.ALIGNMENT_RIGHT;
         sessionArray[colNum++][rowNum] = "IN_WAIT";
         alignment[colNum] = Str.ALIGNMENT_RIGHT;
-        sessionArray[colNum++][rowNum] = "RIO/WIO/REDO";
+        sessionArray[colNum++][rowNum] = "RIO/WIO/REDO/CPU";
         alignment[colNum] = Str.ALIGNMENT_LEFT;
         sessionArray[colNum++][rowNum] = GvSession.columnNames[GvSession.EVENT];
 

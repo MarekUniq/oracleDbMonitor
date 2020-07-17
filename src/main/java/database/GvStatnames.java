@@ -47,7 +47,7 @@ class GvStatnames {
     static void loadStatisticNameMapping(Connection connection) throws SQLException {
         //
         String sql = "select inst_id, statistic#, name from gv$statname\n" +
-                "where name IN ('physical read total bytes','physical read total IO requests','physical write total bytes','physical write total IO requests','redo size' /*,'CPU used by this session','consistent gets','db block gets','db block changes','bytes sent via SQL*Net to client','bytes received via SQL*Net from client','bytes sent via SQL*Net to dblink','bytes received via SQL*Net from dblink','SQL*Net roundtrips to/from client','SQL*Net roundtrips to/from dblink','user calls','execute count','user commits','user rollbacks'*/)\n";
+                "where name IN ('physical read total bytes','physical read total IO requests','physical write total bytes','physical write total IO requests','redo size','CPU used by this session' /*,'consistent gets','db block gets','db block changes','bytes sent via SQL*Net to client','bytes received via SQL*Net from client','bytes sent via SQL*Net to dblink','bytes received via SQL*Net from dblink','SQL*Net roundtrips to/from client','SQL*Net roundtrips to/from dblink','user calls','execute count','user commits','user rollbacks'*/)\n";
         //
         PreparedStatement ps = connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
