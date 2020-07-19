@@ -12,12 +12,10 @@ import java.sql.SQLException;
  *
  */
 public class OracleDbMonitorImpl implements Runnable, TelnetMessageProvider {
-
     // counter for dead detection, if not updated then thread is dead
     private int loopSequence = 0;
     //
     private DbConnection dbConnection;
-
 
     // in milliseconds
     int getUpdateInterval() {
@@ -44,28 +42,27 @@ public class OracleDbMonitorImpl implements Runnable, TelnetMessageProvider {
                         loopSequence++;
                         //
                         updateData();
-
                         // equal interval management
                         long currentTime = System.currentTimeMillis();
                         // if time is passed
                         while (currentTime >= nextTime) {
                             nextTime += getUpdateInterval();
                         }
-
                         if (nextTime >= currentTime) {
                             Thread.sleep(nextTime - currentTime);
                         }
                         //
                         nextTime += getUpdateInterval();
                     }
-                } catch (SQLException e) {
+                }
+                catch (SQLException e) {
                     String errorStack = Str.throwableToString(e);
                     Log.println("SQLException" + errorStack);
                     int sleepTimeMin = 5;
                     setTelnetMessage(Log.getLinePrefix() + " : sleep " + sleepTimeMin + " minute"
-                            + Log.EOL
-                            + Str.convertUnixToDos(errorStack)
-                            + Log.EOL
+                                     + Log.EOL
+                                     + Str.convertUnixToDos(errorStack)
+                                     + Log.EOL
                     );
                     if (dbConnection != null) {
                         dbConnection.close();
@@ -75,7 +72,8 @@ public class OracleDbMonitorImpl implements Runnable, TelnetMessageProvider {
                     loopSequence++;
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             Log.printException(e);
             System.exit(-1);
         }
@@ -86,10 +84,8 @@ public class OracleDbMonitorImpl implements Runnable, TelnetMessageProvider {
     private void updateData() throws Exception {
         //
         StringBuffer sb = new StringBuffer();
-
         //
         dbConnection.loadData();
-
         //
         dbConnection.getOutputDatabase(sb);
         //
@@ -104,11 +100,10 @@ public class OracleDbMonitorImpl implements Runnable, TelnetMessageProvider {
         dbConnection.getOutputSessionLongops(sb);
         //
         dbConnection.getOutputTempsegUsage(sb);
-
         //
         String message = sb.toString();
         setTelnetMessage(message);
-//    Log.print(message);
+        //    Log.print(message);
     }
 
     //

@@ -15,7 +15,6 @@ import java.util.List;
  *
  */
 public class Str {
-
     public static final char LEFT_SQUARE_BRACKET = '['; // (char) 91
     public static final char RIGHT_SQUARE_BRACKET = ']'; // (char) 93
 
@@ -51,12 +50,13 @@ public class Str {
         for (int i = 0; i < l.size(); i++) {
             List col = l.get(i);
             //
-            if (i != 0)
+            if (i != 0) {
                 sb.append(" ");
-//        sb.append(" | ");
+            }
+            //        sb.append(" | ");
             sb.append(TelnetSession.GREEN);
             sb.append(col.get(0));
-//      sb.append(TelnetSession.COLOR_RESET);
+            //      sb.append(TelnetSession.COLOR_RESET);
             sb.append(": ");
             sb.append(TelnetSession.DARK_YELLOW);
             sb.append(col.get(1));
@@ -76,21 +76,20 @@ public class Str {
     @SuppressWarnings({"SameParameterValue", "WeakerAccess"})
     public static String rpad(String s, int len, char c) {
         // If s == null, then return null
-        if (s == null)
+        if (s == null) {
             return null;
-            // If s is longer or equal than requested then dont cut it
-        else if (s.length() >= len)
+        }
+        // If s is longer or equal than requested then dont cut it
+        else if (s.length() >= len) {
             return s;
-
+        }
         // new StringBuffer with string
         StringBuffer sb;
         sb = new StringBuffer(s);
-
         // Adds the requested amount of characters c
         for (int i = s.length(); i < len; i++) {
             sb.append(c);
         }
-
         // return it as String
         return sb.toString();
     }
@@ -104,32 +103,40 @@ public class Str {
             int maxColumnLength = 0;
             for (int n = 0; n < sa[i].length; n++) {
                 String value = sa[i][n];
-                if (value != null && maxColumnLength < value.length())
+                if (value != null && maxColumnLength < value.length()) {
                     maxColumnLength = value.length();
+                }
             }
             //
             maxLen[i] = maxColumnLength;
         }
-
         // print output
         for (int i = 0; i < sa[0].length; i++) {
             //
-            if (i == 0)
+            if (i == 0) {
                 sb.append(TelnetSession.GREEN);
-            else
+            }
+            else {
                 sb.append(TelnetSession.YELLOW);
+            }
             //
             for (int n = 0; n < sa.length; n++) {
                 //
-                if (n != 0) sb.append(' ');
+                if (n != 0) {
+                    sb.append(' ');
+                }
                 //
                 String value = sa[n][i];
-                if (value == null) value = "";
+                if (value == null) {
+                    value = "";
+                }
                 //
-                if (alignment[n] == ALIGNMENT_LEFT)
+                if (alignment[n] == ALIGNMENT_LEFT) {
                     sb.append(rpad(value, maxLen[n], ' '));
-                else if (alignment[n] == ALIGNMENT_RIGHT)
+                }
+                else if (alignment[n] == ALIGNMENT_RIGHT) {
                     sb.append(lpad(value, maxLen[n], ' '));
+                }
             }
             sb.append(Log.EOL);
             //
@@ -149,24 +156,22 @@ public class Str {
     @SuppressWarnings({"SameParameterValue", "WeakerAccess"})
     public static String lpad(String s, int len, char c) {
         // If s == null, then return null
-        if (s == null)
+        if (s == null) {
             return null;
-            // If s is longer or equal than requested then dont cut it
-        else if (s.length() >= len)
+        }
+        // If s is longer or equal than requested then dont cut it
+        else if (s.length() >= len) {
             return s;
-
+        }
         // new StringBuffer
         StringBuffer sb;
         sb = new StringBuffer();
-
         // Adds the requested amount of characters c
         for (int i = s.length(); i < len; i++) {
             sb.append(c);
         }
-
         // append the rest
         sb.append(s);
-
         // return it as String
         return sb.toString();
     }
@@ -180,14 +185,17 @@ public class Str {
     //
     public static String rtrunc(String s, int maxLength) {
         //
-        if (s == null) return null;
+        if (s == null) {
+            return null;
+        }
         //
-        if (s.length() <= maxLength)
+        if (s.length() <= maxLength) {
             return s;
-        else
+        }
+        else {
             return s.substring(0, maxLength);
+        }
     }
-
 
     //
     //
@@ -199,7 +207,6 @@ public class Str {
         pico(1E-12d, "p"), nano(1E-9d, "n"), micro(1E-6d, "μ"), milli(1E-3d, "m") //
         , none(1E+0d, "") //
         , kilo(1E+3d, "k"), mega(1E+6d, "M"), giga(1E+9d, "G"), tera(1E+12d, "T"), peta(1E+15d, "P"), exa(1E+18d, "E");
-
         //
         double denotingFactor;
         String symbol;
@@ -220,13 +227,13 @@ public class Str {
 
         // see määrab ülemineku piiri. 3E+3d ütleb, et 2999 on 2999 kuid 3001 on 3k
         public double getLessThanOverOne(double num) {
-//      if (Math.abs(num) >= 1d)
-//        // if values is greater than 1
-//        return denotingFactor * 0.8E+3d;
-//      else if (Math.abs(num) >= 0.001d)
-//        // between
-//        return denotingFactor * 0.01E+3d;
-//      else
+            //      if (Math.abs(num) >= 1d)
+            //        // if values is greater than 1
+            //        return denotingFactor * 0.8E+3d;
+            //      else if (Math.abs(num) >= 0.001d)
+            //        // between
+            //        return denotingFactor * 0.01E+3d;
+            //      else
             // below
             return denotingFactor * 0.8E+3d;
         }
@@ -240,12 +247,12 @@ public class Str {
         double num = Math.abs(number);
         BigDecimal bigDecimal = null;
         MetricPrefix symbol = null;
-
         if (number == 0d) {
             MetricPrefix metricPrefix = MetricPrefix.none;
             bigDecimal = new BigDecimal(num / metricPrefix.getDenotingFactor());
             symbol = metricPrefix;
-        } else {
+        }
+        else {
             for (MetricPrefix metricPrefix : MetricPrefix.values()) {
                 if (num < metricPrefix.getLessThanOverOne(num)) {
                     bigDecimal = new BigDecimal(num / metricPrefix.getDenotingFactor());
@@ -260,28 +267,32 @@ public class Str {
                 symbol = metricPrefix;
             }
         }
-
         //
-        if (number >= 0d)
+        if (number >= 0d) {
             return bigDecimal.round(MATH_CONTEXT).toPlainString() + symbol.getSymbol();
-        else
+        }
+        else {
             return "-" + bigDecimal.round(MATH_CONTEXT).toPlainString() + symbol.getSymbol();
+        }
     }
-
 
     //
     public static String formatSecondsNumber(long num) {
         //
-        if (num < 60)
+        if (num < 60) {
             return Long.toString(num) + "s";
-        else if (num < 3600)
+        }
+        else if (num < 3600) {
             return Long.toString(num / 60) + "m " + Long.toString((num % 60)) + "s";
-        else if (num < 86400)
+        }
+        else if (num < 86400) {
             return Long.toString(num / 3600) + "h " + Long.toString((num % 3600) / 60) + "m " + Long.toString((num % 60)) + "s";
-        else
+        }
+        else {
             return Long.toString(num / 86400) + "d " + Long.toString((num % 86400) / 3600) + "h " + Long.toString((num % 3600) / 60) + "m"
-//        + " " + Integer.toString((num%60)) + "s"
+                    //        + " " + Integer.toString((num%60)) + "s"
                     ;
+        }
     }
 
     //
@@ -298,8 +309,9 @@ public class Str {
         //
         for (char c : unix.toCharArray()) {
             sb.append(c);
-            if (c == '\n')
+            if (c == '\n') {
                 sb.append('\r');
+            }
         }
         //
         return sb.toString();
@@ -324,21 +336,25 @@ public class Str {
      */
     public static String surroundWithChar(String s, char leftChar, char rightChar) {
         // NULL
-        if (s == null)
+        if (s == null) {
             return null;
-            // length is ZERO or ONE
-        else if (s.length() <= 1)
+        }
+        // length is ZERO or ONE
+        else if (s.length() <= 1) {
             return leftChar + s + rightChar;
-            // all others
+        }
+        // all others
         else {
             //
             boolean isFirstChar = s.charAt(0) == leftChar;
             boolean isLastChar = s.charAt(s.length() - 1) == rightChar;
             // if first and last char is QUOTATION_MARK mart already then dont add
-            if (isFirstChar && isLastChar)
+            if (isFirstChar && isLastChar) {
                 return s;
-            else
+            }
+            else {
                 return leftChar + s + rightChar;
+            }
         }
     }
 

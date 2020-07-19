@@ -1,11 +1,9 @@
 package common;
 
-
 /**
  *
  */
 public class CommandLineArgument {
-
     //
     public static enum ARGS {
         DBM_INTERVAL //
@@ -45,8 +43,9 @@ public class CommandLineArgument {
     public static void setUpdateInterval(int updateInterval) {
         CommandLineArgument.updateInterval = updateInterval;
         //
-        if (getUpdateInterval() < 1000)
+        if (getUpdateInterval() < 1000) {
             throw new RuntimeException("Argument value too small: " + ARGS.DBM_INTERVAL + " : " + getUpdateInterval());
+        }
     }
 
     public static void setUpdateInterval(String updateInterval) {
@@ -70,8 +69,9 @@ public class CommandLineArgument {
     private static void setListeningHostPort(String listeningHostPort) {
         CommandLineArgument.listeningHostPort = Integer.parseInt(listeningHostPort);
         //
-        if (getListeningHostPort() <= 1024)
+        if (getListeningHostPort() <= 1024) {
             throw new RuntimeException("Argument value too small: " + ARGS.DBM_PORT + " : " + getListeningHostPort());
+        }
         //
         Log.println(ARGS.DBM_PORT + " : " + getListeningHostPort());
     }
@@ -175,7 +175,6 @@ public class CommandLineArgument {
         Log.errPrintln("    command line argument overrides environment variables");
         Log.errPrintln("  - output of telnet server can be stored into log files using oracleDbMonitor/ReadTelnetSocket");
         Log.errPrintln("");
-
         Log.errPrintln("Usage:");
         Log.errPrintln("  java oracleDbMonitor/ReadTelnetSocket <host/ip> <port> <log_file_suffix>");
         Log.errPrintln("Arguments:");
@@ -205,7 +204,6 @@ public class CommandLineArgument {
     //
     //
     private static void setArgumentValueUpdateInterval(ARGS arg, String envValue) {
-
         switch (arg) {
             case DBM_INTERVAL:
                 setUpdateInterval(envValue);
@@ -252,15 +250,14 @@ public class CommandLineArgument {
     public static void decodeArguments(String[] args) throws Exception {
         //
         printHelp();
-
         //
         // Process environment
         for (ARGS arg : ARGS.values()) {
             String envValue = getEnvironmentVariableValue(arg);
-            if (envValue != null)
+            if (envValue != null) {
                 setArgumentValueUpdateInterval(arg, envValue);
+            }
         }
-
         //
         // Process command line
         cmdLineFor:
@@ -285,7 +282,6 @@ public class CommandLineArgument {
             throw new RuntimeException("invalid argument: " + cmdLineArg);
         }
     }
-
 
     //
     //

@@ -7,7 +7,6 @@ import java.sql.SQLException;
  *
  */
 class GvStatname {
-
     //
     private String instId;
     private String statistic;

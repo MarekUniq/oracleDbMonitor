@@ -11,7 +11,6 @@ import java.util.TreeMap;
  *
  */
 class GvSysstats {
-
     // map sorted by primary key inst_id,name
     private static final SortedMap<String, GvSysstat> sysstatsMapByPrimaryKey = new TreeMap<>();
     //
@@ -38,7 +37,8 @@ class GvSysstats {
         //
         if (gvSysstat != null) {
             gvSysstat.setNextValue(value);
-        } else {
+        }
+        else {
             gvSysstat = new GvSysstat(instId, name, value);
             sysstatsMapByPrimaryKey.put(primaryKey, gvSysstat);
         }
@@ -59,13 +59,11 @@ class GvSysstats {
         double interval = CommandLineArgument.getUpdateIntervalInSeconds();
         //
         long value = getStats(instId, event);
-
         //
         return
-                Str.formatDoubleNumber((double) value / interval)
+                Str.formatDoubleNumber((double)value / interval)
                 ;
     }
-
 
     //
     //
@@ -75,12 +73,11 @@ class GvSysstats {
         //
         long phyReadTotalBytes = getStats(instId, GvStatnames.PHYSICAL_READ_TOTAL_BYTES);
         long phyReadTotalIOReq = getStats(instId, GvStatnames.PHYSICAL_READ_TOTAL_IO_REQUESTS);
-
         //
         return
-                Str.formatDoubleNumber((double) phyReadTotalBytes / interval)
-                        + "/"
-                        + Str.formatDoubleNumber((double) phyReadTotalIOReq / interval)
+                Str.formatDoubleNumber((double)phyReadTotalBytes / interval)
+                + "/"
+                + Str.formatDoubleNumber((double)phyReadTotalIOReq / interval)
                 ;
     }
 
@@ -92,12 +89,11 @@ class GvSysstats {
         //
         long phyWriteTotalBytes = getStats(instId, GvStatnames.PHYSICAL_WRITE_TOTAL_BYTES);
         long phyWriteTotalIOReq = getStats(instId, GvStatnames.PHYSICAL_WRITE_TOTAL_IO_REQUESTS);
-
         //
         return
-                Str.formatDoubleNumber((double) phyWriteTotalBytes / interval)
-                        + "/"
-                        + Str.formatDoubleNumber((double) phyWriteTotalIOReq / interval)
+                Str.formatDoubleNumber((double)phyWriteTotalBytes / interval)
+                + "/"
+                + Str.formatDoubleNumber((double)phyWriteTotalIOReq / interval)
                 ;
     }
 
@@ -109,13 +105,11 @@ class GvSysstats {
         //
         String cpuUsedKey = GvSysstat.getPrimaryKey(instId, GvStatnames.CPU_USED_BY_THIS_SESSION);
         long cpuUsed = sysstatsMapByPrimaryKey.get(cpuUsedKey).getValueDiff();
-
         //
         return
-                Str.formatDoubleNumber((double) cpuUsed / interval / 100 /* convert centi-sec to sec*/)
+                Str.formatDoubleNumber((double)cpuUsed / interval / 100 /* convert centi-sec to sec*/)
                 ;
     }
-
 
     //
     //
@@ -126,15 +120,13 @@ class GvSysstats {
         long bytesRecv = getStats(instId, GvStatnames.BYTES_RECEIVED_VIA_SQL_NET_FROM_CLIENT) + getStats(instId, GvStatnames.BYTES_RECEIVED_VIA_SQL_NET_FROM_DBLINK);
         long bytesSent = getStats(instId, GvStatnames.BYTES_SENT_VIA_SQL_NET_TO_CLIENT) + getStats(instId, GvStatnames.BYTES_SENT_VIA_SQL_NET_TO_DBLINK);
         long roundTrips = getStats(instId, GvStatnames.SQL_NET_ROUNDTRIPS_TO_FROM_CLIENT) + getStats(instId, GvStatnames.SQL_NET_ROUNDTRIPS_TO_FROM_DBLINK);
-
         //
         return
-                Str.formatDoubleNumber((double) bytesRecv / interval)
-                        + "/" + Str.formatDoubleNumber((double) bytesSent / interval)
-                        + "/" + Str.formatDoubleNumber((double) roundTrips / interval)
+                Str.formatDoubleNumber((double)bytesRecv / interval)
+                + "/" + Str.formatDoubleNumber((double)bytesSent / interval)
+                + "/" + Str.formatDoubleNumber((double)roundTrips / interval)
                 ;
     }
-
 
     //
     public static String getLogicalReadStats(String instId) {
@@ -144,12 +136,11 @@ class GvSysstats {
         long consistentGetsGets = getStats(instId, GvStatnames.CONSISTENT_GETS);
         long dbBlockGets = getStats(instId, GvStatnames.DB_BLOCK_GETS);
         long dbBlockChanges = getStats(instId, GvStatnames.DB_BLOCK_CHANGES);
-
         //
         return
-                Str.formatDoubleNumber((double) consistentGetsGets / interval)
-                        + "/" + Str.formatDoubleNumber((double) dbBlockGets / interval)
-                        + "/" + Str.formatDoubleNumber((double) dbBlockChanges / interval)
+                Str.formatDoubleNumber((double)consistentGetsGets / interval)
+                + "/" + Str.formatDoubleNumber((double)dbBlockGets / interval)
+                + "/" + Str.formatDoubleNumber((double)dbBlockChanges / interval)
                 ;
     }
 
@@ -162,13 +153,12 @@ class GvSysstats {
         long executeCount = getStats(instId, GvStatnames.EXECUTE_COUNT);
         long userCommits = getStats(instId, GvStatnames.USER_COMMITS);
         long userRollbacks = getStats(instId, GvStatnames.USER_ROLLBACKS);
-
         //
         return
-                Str.formatDoubleNumber((double) userCalls / interval)
-                        + "/" + Str.formatDoubleNumber((double) executeCount / interval)
-                        + "/" + Str.formatDoubleNumber((double) userCommits / interval)
-                        + "/" + Str.formatDoubleNumber((double) userRollbacks / interval)
+                Str.formatDoubleNumber((double)userCalls / interval)
+                + "/" + Str.formatDoubleNumber((double)executeCount / interval)
+                + "/" + Str.formatDoubleNumber((double)userCommits / interval)
+                + "/" + Str.formatDoubleNumber((double)userRollbacks / interval)
                 ;
     }
 

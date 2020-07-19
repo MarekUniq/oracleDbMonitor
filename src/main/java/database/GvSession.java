@@ -14,9 +14,7 @@ import java.util.List;
  *
  */
 public class GvSession {
-
     public static final String WAIT_CLASS_IDLE = "Idle";
-
     //
     private static final int INST_ID = 0;
     private static final int SADDR = 1;
@@ -41,7 +39,6 @@ public class GvSession {
     private static final int BLOCKING_INSTANCE = 20;
     private static final int BLOCKING_SESSION = 21;
     static final int CON_ID = 22;
-
     //
     static final String[] columnNames = {
             "INST_ID"
@@ -73,26 +70,24 @@ public class GvSession {
     public static String getColumnName(int columnPosition) {
         return columnNames[columnPosition];
     }
-
     //  select 'private String ' ||  replace(replace( substr(lower(column_name),1,1) || substr(initcap(column_name),2), '_',''), '#','') || ';            // '
-//  ||  data_type from dba_tab_cols where table_name like 'GV_$SESSION' order by column_id
-
+    //  ||  data_type from dba_tab_cols where table_name like 'GV_$SESSION' order by column_id
     private String instId;            // NUMBER
     private String saddr;            // RAW
     private String sid;            // NUMBER
     private String serial;            // NUMBER
     //  private String audsid;            // NUMBER
-//  private String paddr;            // RAW
-//  private String user;            // NUMBER
+    //  private String paddr;            // RAW
+    //  private String user;            // NUMBER
     private String username;            // VARCHAR2
     //  private String command;            // NUMBER
-//  private String ownerid;            // NUMBER
-//  private String taddr;            // VARCHAR2
-//  private String lockwait;            // VARCHAR2
+    //  private String ownerid;            // NUMBER
+    //  private String taddr;            // VARCHAR2
+    //  private String lockwait;            // VARCHAR2
     private String status;            // VARCHAR2
     //  private String server;            // VARCHAR2
-//  private String schema;            // NUMBER
-//  private String schemaname;            // VARCHAR2
+    //  private String schema;            // NUMBER
+    //  private String schemaname;            // VARCHAR2
     private String osuser;            // VARCHAR2
     //  private String process;            // VARCHAR2
     private String machine;            // VARCHAR2
@@ -101,101 +96,97 @@ public class GvSession {
     private String program;            // VARCHAR2
     private String type;            // VARCHAR2
     //  private String sqlAddress;            // RAW
-//  private String sqlHashValue;            // NUMBER
+    //  private String sqlHashValue;            // NUMBER
     private String sqlId;            // VARCHAR2
     //  private String sqlChildNumber;            // NUMBER
-//  private String sqlExecStart;            // DATE
-//  private String sqlExecId;            // NUMBER
-//  private String prevSqlAddr;            // RAW
-//  private String prevHashValue;            // NUMBER
-//  private String prevSqlId;            // VARCHAR2
-//  private String prevChildNumber;            // NUMBER
-//  private String prevExecStart;            // DATE
-//  private String prevExecId;            // NUMBER
-//  private String plsqlEntryObjectId;            // NUMBER
-//  private String plsqlEntrySubprogramId;            // NUMBER
-//  private String plsqlObjectId;            // NUMBER
-//  private String plsqlSubprogramId;            // NUMBER
+    //  private String sqlExecStart;            // DATE
+    //  private String sqlExecId;            // NUMBER
+    //  private String prevSqlAddr;            // RAW
+    //  private String prevHashValue;            // NUMBER
+    //  private String prevSqlId;            // VARCHAR2
+    //  private String prevChildNumber;            // NUMBER
+    //  private String prevExecStart;            // DATE
+    //  private String prevExecId;            // NUMBER
+    //  private String plsqlEntryObjectId;            // NUMBER
+    //  private String plsqlEntrySubprogramId;            // NUMBER
+    //  private String plsqlObjectId;            // NUMBER
+    //  private String plsqlSubprogramId;            // NUMBER
     private String module;            // VARCHAR2
     //  private String moduleHash;            // NUMBER
     private String action;            // VARCHAR2
     //  private String actionHash;            // NUMBER
-//  private String clientInfo;            // VARCHAR2
-//  private String fixedTableSequence;            // NUMBER
-//  private String rowWaitObj;            // NUMBER
-//  private String rowWaitFile;            // NUMBER
-//  private String rowWaitBlock;            // NUMBER
-//  private String rowWaitRow;            // NUMBER
-//  private String topLevelCall;            // NUMBER
-//  private String logonTime;            // DATE
+    //  private String clientInfo;            // VARCHAR2
+    //  private String fixedTableSequence;            // NUMBER
+    //  private String rowWaitObj;            // NUMBER
+    //  private String rowWaitFile;            // NUMBER
+    //  private String rowWaitBlock;            // NUMBER
+    //  private String rowWaitRow;            // NUMBER
+    //  private String topLevelCall;            // NUMBER
+    //  private String logonTime;            // DATE
     private Timestamp logonTime;            // DATE
     private long lastCallEt;            // NUMBER
     //  private String pdmlEnabled;            // VARCHAR2
-//  private String failoverType;            // VARCHAR2
-//  private String failoverMethod;            // VARCHAR2
-//  private String failedOver;            // VARCHAR2
-//  private String resourceConsumerGroup;            // VARCHAR2
-//  private String pdmlStatus;            // VARCHAR2
-//  private String pddlStatus;            // VARCHAR2
-//  private String pqStatus;            // VARCHAR2
-//  private String currentQueueDuration;            // NUMBER
-//  private String clientIdentifier;            // VARCHAR2
-//  private String blockingSessionStatus;            // VARCHAR2
+    //  private String failoverType;            // VARCHAR2
+    //  private String failoverMethod;            // VARCHAR2
+    //  private String failedOver;            // VARCHAR2
+    //  private String resourceConsumerGroup;            // VARCHAR2
+    //  private String pdmlStatus;            // VARCHAR2
+    //  private String pddlStatus;            // VARCHAR2
+    //  private String pqStatus;            // VARCHAR2
+    //  private String currentQueueDuration;            // NUMBER
+    //  private String clientIdentifier;            // VARCHAR2
+    //  private String blockingSessionStatus;            // VARCHAR2
     private String blockingInstance;            // NUMBER
     private String blockingSession;            // NUMBER
-
     // this session is blocked by the following session
     private GvSession blockingGvSession;
     // the following sessions are blocked by this session
     private final List<GvSession> blockingGvSessionList = new ArrayList<>();
-
     //  private String finalBlockingSessionStatus;            // VARCHAR2
-//  private String finalBlockingInstance;            // NUMBER
-//  private String finalBlockingSession;            // NUMBER
-//  private String seq;            // NUMBER
-//  private String event;            // NUMBER
+    //  private String finalBlockingInstance;            // NUMBER
+    //  private String finalBlockingSession;            // NUMBER
+    //  private String seq;            // NUMBER
+    //  private String event;            // NUMBER
     private String event;            // VARCHAR2
     //  private String p1text;            // VARCHAR2
-//  private String p1;            // NUMBER
-//  private String p1raw;            // RAW
-//  private String p2text;            // VARCHAR2
-//  private String p2;            // NUMBER
-//  private String p2raw;            // RAW
-//  private String p3text;            // VARCHAR2
-//  private String p3;            // NUMBER
-//  private String p3raw;            // RAW
-//  private String waitClassId;            // NUMBER
-//  private String waitClass;            // NUMBER
+    //  private String p1;            // NUMBER
+    //  private String p1raw;            // RAW
+    //  private String p2text;            // VARCHAR2
+    //  private String p2;            // NUMBER
+    //  private String p2raw;            // RAW
+    //  private String p3text;            // VARCHAR2
+    //  private String p3;            // NUMBER
+    //  private String p3raw;            // RAW
+    //  private String waitClassId;            // NUMBER
+    //  private String waitClass;            // NUMBER
     private String waitClass;            // VARCHAR2
     //  private String waitTime;            // NUMBER
     private long secondsInWait;            // NUMBER
     private String state;            // VARCHAR2
-//  private String waitTimeMicro;            // NUMBER
-//  private String timeRemainingMicro;            // NUMBER
-//  private String timeSinceLastWaitMicro;            // NUMBER
-//  private String serviceName;            // VARCHAR2
-//  private String sqlTrace;            // VARCHAR2
-//  private String sqlTraceWaits;            // VARCHAR2
-//  private String sqlTraceBinds;            // VARCHAR2
-//  private String sqlTracePlanStats;            // VARCHAR2
-//  private String sessionEditionId;            // NUMBER
-//  private String creatorAddr;            // RAW
-//  private String creatorSerial;            // NUMBER
-//  private String ecid;            // VARCHAR2
-//  private String sqlTranslationProfileId;            // NUMBER
-//  private String pgaTunableMem;            // NUMBER
-//  private String shardDdlStatus;            // VARCHAR2
-private String conId;            // NUMBER
-//  private String externalName;            // VARCHAR2
-//  private String plsqlDebuggerConnected;            // VARCHAR2
-
+    //  private String waitTimeMicro;            // NUMBER
+    //  private String timeRemainingMicro;            // NUMBER
+    //  private String timeSinceLastWaitMicro;            // NUMBER
+    //  private String serviceName;            // VARCHAR2
+    //  private String sqlTrace;            // VARCHAR2
+    //  private String sqlTraceWaits;            // VARCHAR2
+    //  private String sqlTraceBinds;            // VARCHAR2
+    //  private String sqlTracePlanStats;            // VARCHAR2
+    //  private String sessionEditionId;            // NUMBER
+    //  private String creatorAddr;            // RAW
+    //  private String creatorSerial;            // NUMBER
+    //  private String ecid;            // VARCHAR2
+    //  private String sqlTranslationProfileId;            // NUMBER
+    //  private String pgaTunableMem;            // NUMBER
+    //  private String shardDdlStatus;            // VARCHAR2
+    private String conId;            // NUMBER
+    //  private String externalName;            // VARCHAR2
+    //  private String plsqlDebuggerConnected;            // VARCHAR2
     // flag: Session is Parallel Query Slave
     private boolean isParallelQuerySlave = false;
     // gv$px_session.server_set
     private String parallelQuerySlave_ServerSet;
     // if parallel Query Slave then Query Coordinator is saved here
     private GvSession parallelQueryCoordinatorRef;
-
     // counter: if Session is Parallel Query Coordinator, then count Slaves here
     private int parallelQueryCoordinatorSlaveCount = 0;
     // if parallel Query Coordinator then Slave list is saved here
@@ -239,18 +230,22 @@ private String conId;            // NUMBER
     public String getUsername() {
         String retVal;
         //
-        if (username == null && getType().equals("BACKGROUND"))
+        if (username == null && getType().equals("BACKGROUND")) {
             retVal = getProgram();
-        else
+        }
+        else {
             retVal = username;
-
+        }
         //
-        if (isParallelQuerySlave())
+        if (isParallelQuerySlave()) {
             return retVal + "(" + getParallelQueryCoordinatorRef().getAlterSystemKillSessionReference() + ":" + getParallelQuerySlave_ServerSet() + ")";
-        else if (getParallelQueryCoordinatorSlaveCount() > 0)
+        }
+        else if (getParallelQueryCoordinatorSlaveCount() > 0) {
             return retVal + "(QC:" + getParallelQueryCoordinatorSlaveCount() + ":" + getParallelQueryCoordinatorActiveSlaveCount() + ")";
-        else
+        }
+        else {
             return retVal;
+        }
     }
 
     void setUsername(String username) {
@@ -295,14 +290,17 @@ private String conId;            // NUMBER
 
     public String getProgram() {
         //
-        if (program == null)
+        if (program == null) {
             return null;
+        }
         //
         String prefix = "oracle@" + getMachine();
-        if (program.startsWith(prefix))
+        if (program.startsWith(prefix)) {
             return program.substring(prefix.length()).trim();
-        else
+        }
+        else {
             return program;
+        }
     }
 
     void setProgram(String program) {
@@ -379,12 +377,16 @@ private String conId;            // NUMBER
 
     public String getEvent() {
         if (getStatusIsActive()) {
-            if (getState().equals("WAITING"))
+            if (getState().equals("WAITING")) {
                 return event;
-            else
+            }
+            else {
                 return "CPU:" + event;
-        } else
+            }
+        }
+        else {
             return "Idle:" + event;
+        }
     }
 
     void setEvent(String event) {
@@ -478,8 +480,9 @@ private String conId;            // NUMBER
 
     public void addParallelQuerySlaveList(GvSession parallelQuerySlave) {
         //
-        if (parallelQuerySlaveList == null)
+        if (parallelQuerySlaveList == null) {
             parallelQuerySlaveList = new ArrayList<>();
+        }
         //
         this.parallelQuerySlaveList.add(parallelQuerySlave);
     }
@@ -513,17 +516,17 @@ private String conId;            // NUMBER
         setConId(rs.getString(getColumnName(CON_ID)));
     }
 
-
     //
     public void printBlockingTree(StringBuffer sb, int level) {
         String paddingText = "   ";
         String padding = "";
-        for (int i = 0; i < level; i++)
+        for (int i = 0; i < level; i++) {
             padding += paddingText;
-
+        }
         //
-        if (level == 0)
+        if (level == 0) {
             sb.append(TelnetSession.DARK_RED);
+        }
         else {
             sb.append(TelnetSession.YELLOW);
             sb.append(padding).append("-> ");
@@ -536,7 +539,8 @@ private String conId;            // NUMBER
         for (GvSession next : getBlockingGvSessionList()) {
             if (next.getBlockingGvSessionList().size() > 0) {
                 next.printBlockingTree(sb, level + 1);
-            } else {
+            }
+            else {
                 sb.append(TelnetSession.YELLOW);
                 sb.append(paddingText).append(padding).append("-> ");
                 printBlockingTreeRow(next, sb);
@@ -563,7 +567,6 @@ private String conId;            // NUMBER
                 .append(" | ").append(session.getEvent());
         sb.append(Log.EOL);
     }
-
 
     //
     public String getPrimaryKeyShort() {
@@ -597,7 +600,7 @@ private String conId;            // NUMBER
 
     //
     public String getAlterSystemKillSessionReference() {
-//    return "'" + getPrimaryKey() + "'";
+        //    return "'" + getPrimaryKey() + "'";
         return getPrimaryKey();
     }
 
@@ -610,8 +613,9 @@ private String conId;            // NUMBER
         int activeCount = 0;
         //
         for (GvSession session : parallelQuerySlaveList) {
-            if (session.getStatusIsActive() && !session.getWaitClass().equals(WAIT_CLASS_IDLE))
+            if (session.getStatusIsActive() && !session.getWaitClass().equals(WAIT_CLASS_IDLE)) {
                 activeCount++;
+            }
         }
         //
         return activeCount;

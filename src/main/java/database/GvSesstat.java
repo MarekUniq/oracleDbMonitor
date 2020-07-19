@@ -4,7 +4,6 @@ package database;
  *
  */
 class GvSesstat {
-
     //
     private String instId;
     private String sid;
@@ -12,7 +11,6 @@ class GvSesstat {
     private long value;
     //
     private long valueDiff;
-
     //
     long updateCounter;
 

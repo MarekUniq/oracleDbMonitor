@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
  *
  */
 class MySession {
-
     //
     private static String instId;
     private static String sid;

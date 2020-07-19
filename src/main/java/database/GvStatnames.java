@@ -14,10 +14,8 @@ import java.util.stream.Collectors;
  *
  */
 class GvStatnames {
-
     // map sorted by primary key inst_id
     private static final SortedMap<String, GvStatname> statnamesMapByPrimaryKey = new TreeMap<>();
-
     //
     public static final String PHYSICAL_READ_TOTAL_BYTES = "physical read total bytes";
     public static final String PHYSICAL_READ_TOTAL_IO_REQUESTS = "physical read total IO requests";
@@ -47,7 +45,7 @@ class GvStatnames {
     static void loadStatisticNameMapping(Connection connection) throws SQLException {
         //
         String sql = "select inst_id, statistic#, name from gv$statname\n" +
-                "where name IN ('physical read total bytes','physical read total IO requests','physical write total bytes','physical write total IO requests','redo size','CPU used by this session' /*,'consistent gets','db block gets','db block changes','bytes sent via SQL*Net to client','bytes received via SQL*Net from client','bytes sent via SQL*Net to dblink','bytes received via SQL*Net from dblink','SQL*Net roundtrips to/from client','SQL*Net roundtrips to/from dblink','user calls','execute count','user commits','user rollbacks'*/)\n";
+                     "where name IN ('physical read total bytes','physical read total IO requests','physical write total bytes','physical write total IO requests','redo size','CPU used by this session' /*,'consistent gets','db block gets','db block changes','bytes sent via SQL*Net to client','bytes received via SQL*Net from client','bytes sent via SQL*Net to dblink','bytes received via SQL*Net from dblink','SQL*Net roundtrips to/from client','SQL*Net roundtrips to/from dblink','user calls','execute count','user commits','user rollbacks'*/)\n";
         //
         PreparedStatement ps = connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -70,7 +68,6 @@ class GvStatnames {
                 .map(gvStatname -> String.format(sqlTemplate, gvStatname.getStatistic()))
                 .collect(Collectors.joining(" union all "));
     }
-
 
     //
     static String getStatistic(String instId, String statisticName) {

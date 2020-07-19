@@ -6,21 +6,19 @@ import java.sql.ResultSet;
  *
  */
 class GvInstance {
-
     //
     static final int INST_ID = 0;
     static final int HOST_NAME = 1;
     static final int VERSION = 2;
     static final int STARTUP_TIME = 3;
-//  static final int STATUS = 4;
-
+    //  static final int STATUS = 4;
     //
     static final String[] columnNames = {
             "INST_ID"
             , "HOST_NAME"
             , "VERSION"
             , "STARTUP_TIME"
-//    , "STATUS"
+            //    , "STATUS"
     };
 
     //
@@ -28,15 +26,13 @@ class GvInstance {
         return columnNames[columnPosition];
     }
 
-
     //
     private String instId;            // NUMBER
     private String hostName;            // VARCHAR2
     private String version;            // VARCHAR2
     //  private String startupTime;            // DATE
     private int startupTime;            // DATE
-//  private String status;            // VARCHAR2
-
+    //  private String status;            // VARCHAR2
 
     //
     public String getInstId() {

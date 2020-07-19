@@ -5,17 +5,19 @@ import common.Str;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
  *
  */
 class GvSesstats {
-
     // map sorted by primary key inst_id,name
     private static final SortedMap<String, GvSesstat> sesstatsMapByPrimaryKey = new TreeMap<>();
-
     //
     private static long gvSesstatFetchTime;
 
@@ -37,20 +39,18 @@ class GvSesstats {
         String sid = rs.getString("SID");
         String statistic = rs.getString("STATISTIC#");
         long value = rs.getLong("VALUE");
-
         //
         String primaryKey = GvSesstat.getPrimaryKey(instId, sid, statistic);
-
         //
         GvSesstat gvSesstat = sesstatsMapByPrimaryKey.get(primaryKey);
         //
         if (gvSesstat != null) {
             gvSesstat.setNextValue(value);
-        } else {
+        }
+        else {
             gvSesstat = new GvSesstat(instId, sid, statistic, value);
             sesstatsMapByPrimaryKey.put(primaryKey, gvSesstat);
         }
-
         //
         gvSesstat.setUpdateCounter(updateCounter);
     }
@@ -61,12 +61,14 @@ class GvSesstats {
         List<String> removeList = new ArrayList<>();
         // detect stats to delete
         for (GvSesstat gvSesstat : sesstatsMapByPrimaryKey.values()) {
-            if (gvSesstat.getUpdateCounter() != updateCounter)
+            if (gvSesstat.getUpdateCounter() != updateCounter) {
                 removeList.add(gvSesstat.getPrimaryKey());
+            }
         }
         // delete
-        for (String key : removeList)
+        for (String key : removeList) {
             sesstatsMapByPrimaryKey.remove(key);
+        }
         // update counter
         updateCounter++;
     }
@@ -99,10 +101,13 @@ class GvSesstats {
         GvSesstat gvSesstat = sesstatsMapByPrimaryKey.get(primaryKey);
         //
         if (GvStatnames.CPU_USED_BY_THIS_SESSION.equals(statisticsName))
-            // CPU time is reported "in 10s of milliseconds"
-            return gvSesstat == null ? 0 : (double) gvSesstat.getValueDiff() / interval / 100;
-        else
-            return gvSesstat == null ? 0 : (double) gvSesstat.getValueDiff() / interval;
+        // CPU time is reported "in 10s of milliseconds"
+        {
+            return gvSesstat == null ? 0 : (double)gvSesstat.getValueDiff() / interval / 100;
+        }
+        else {
+            return gvSesstat == null ? 0 : (double)gvSesstat.getValueDiff() / interval;
+        }
     }
 
 }

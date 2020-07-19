@@ -58,7 +58,6 @@ class GvSysstat {
         setValue(nextValue);
     }
 
-
     //
     public static String getPrimaryKey(String instId, String name) {
         return instId + "," + name;

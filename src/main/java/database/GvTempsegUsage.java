@@ -6,7 +6,6 @@ import java.sql.ResultSet;
  *
  */
 public class GvTempsegUsage {
-
     //
     static final int INST_ID = 0;
     static final int SESSION_ADDR = 1;
@@ -15,7 +14,6 @@ public class GvTempsegUsage {
     static final int SEGTYPE = 4;
     static final int SEGBLK = 5;
     static final int BLOCKS = 6;
-
     //
     static final String[] columnNames = {
             "INST_ID"

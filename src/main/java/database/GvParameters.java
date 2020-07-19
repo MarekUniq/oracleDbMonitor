@@ -8,10 +8,8 @@ import java.util.TreeMap;
  *
  */
 class GvParameters {
-
     // map sorted by primary key inst_id
     private static final SortedMap<String, GvParameter> instancesMapByPrimaryKey = new TreeMap<>();
-
     //
     private static long fetchTime;
 
@@ -28,7 +26,6 @@ class GvParameters {
         instancesMapByPrimaryKey.clear();
     }
 
-
     public static void addParameter(ResultSet rs) throws Exception {
         //
         GvParameter parameter = new GvParameter(rs);
@@ -38,17 +35,21 @@ class GvParameters {
     //
     public static String getCpuCount(String instId) {
         GvParameter parameter = instancesMapByPrimaryKey.get(GvParameter.getPrimaryKey(instId, GvParameter.NAME.cpu_count));
-        if (parameter == null)
+        if (parameter == null) {
             return "missing";
-        else
+        }
+        else {
             return parameter.getValue();
+        }
     }
 
     public static String getDbBlockSize() {
         GvParameter parameter = instancesMapByPrimaryKey.get(GvParameter.getPrimaryKey("1", GvParameter.NAME.db_block_size));
-        if (parameter == null)
+        if (parameter == null) {
             return "missing";
-        else
+        }
+        else {
             return parameter.getValue();
+        }
     }
 }

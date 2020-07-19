@@ -4,14 +4,12 @@ package database;
  *
  */
 class GvSystemEvent {
-
     //
     private String instId;
     private String event;
     private long totalWaits;
     private long totalTimeouts;
     private long timeWaited;
-
     //
     private long totalWaitsDiff;
     private long totalTimeoutsDiff;
@@ -104,7 +102,6 @@ class GvSystemEvent {
         setTimeWaitedDiff(timeWaited - getTimeWaited());
         setTimeWaited(timeWaited);
     }
-
 
     //
     public static String getPrimaryKey(String instId, String event) {

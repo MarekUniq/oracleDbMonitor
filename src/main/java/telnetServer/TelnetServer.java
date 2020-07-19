@@ -13,7 +13,6 @@ import java.net.Socket;
  *
  */
 public class TelnetServer implements Runnable {
-
     // server socket
     private ServerSocket serverSocket;
     private final TelnetMessageProvider messageProviderInterface;
@@ -54,10 +53,12 @@ public class TelnetServer implements Runnable {
         int listeningPortNumber = CommandLineArgument.getListeningHostPort();
         //
         InetAddress inetAddress;
-        if (listeningAddress != null)
+        if (listeningAddress != null) {
             inetAddress = Inet4Address.getByName(listeningAddress);
-        else
+        }
+        else {
             inetAddress = Inet4Address.getLocalHost();
+        }
         //
         serverSocket = new ServerSocket(listeningPortNumber, 0, inetAddress);
     }
@@ -67,7 +68,7 @@ public class TelnetServer implements Runnable {
         //
         Log.println("TelnetServer started");
         Log.println("Listening address: " + serverSocket.toString());
-//    Log.println("isDaemon(): " + Thread.currentThread().isDaemon());
+        //    Log.println("isDaemon(): " + Thread.currentThread().isDaemon());
         //
         try {
             //
@@ -83,18 +84,18 @@ public class TelnetServer implements Runnable {
                 thread.setDaemon(true);
                 thread.start();
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             Log.println("failure", e);
         }
-
         //
         try {
-//      if (serverSocket != null)
+            //      if (serverSocket != null)
             serverSocket.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             Log.println("serverSocket.close() failed", e);
         }
-
         //
         Log.println("TelnetServer failed");
     }

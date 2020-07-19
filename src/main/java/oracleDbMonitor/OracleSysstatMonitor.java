@@ -7,14 +7,21 @@ import common.Str;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Comparator;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  *
  */
 public class OracleSysstatMonitor {
-
     //
     private Connection c;
 
@@ -37,32 +44,29 @@ public class OracleSysstatMonitor {
         final int interval = CommandLineArgument.getUpdateInterval();
         PreparedStatement ps;
         String sql;
-
         //
         if (CommandLineArgument.getSid() > 0) {
             Log.println("SESSTAT based monitoring: " + CommandLineArgument.ARGS.SID + ": " + CommandLineArgument.getSid() + " " + CommandLineArgument.ARGS.INST_ID + ": " + CommandLineArgument.getInstId());
             sql = "SELECT SYSDATE, INST_ID, SID ||' ' || NAME NAME, VALUE FROM GV$SESSTAT S NATURAL INNER JOIN GV$STATNAME SN WHERE SID = " + CommandLineArgument.getSid();
             //
-            if (CommandLineArgument.getInstId() > 0)
+            if (CommandLineArgument.getInstId() > 0) {
                 sql += " AND INST_ID = " + CommandLineArgument.getInstId();
-        } else {
+            }
+        }
+        else {
             Log.println("SYSSTAT based monitoring");
             sql = "SELECT SYSDATE, INST_ID, NAME, VALUE FROM GV$SYSSTAT";
         }
-
         //
         Log.println("SQL: " + sql);
         ps = c.prepareStatement(sql);
-
         //
         Sysstats ePrev;
         Sysstats eCurr;
         //
         ResultSet rs = ps.executeQuery();
-
         ePrev = new Sysstats(rs);
         Thread.sleep(interval);
-
         //
         while (true) {
             rs = ps.executeQuery();
@@ -82,7 +86,6 @@ public class OracleSysstatMonitor {
     //
     //
     private class Sysstats {
-
         private SortedMap<String, Sysstat> stats = new TreeMap<>();
 
         public Sysstats(ResultSet rs) throws SQLException {
@@ -101,7 +104,6 @@ public class OracleSysstatMonitor {
                     return retVal == 0 ? o1.getPrimaryKey().compareTo(o2.getPrimaryKey()) : retVal;
                 }
             });
-
             //
             {
                 for (Sysstat currStat : stats.values()) {
@@ -109,11 +111,11 @@ public class OracleSysstatMonitor {
                     Sysstat prevStat = ePrev.getEventByPrimaryKey(currStat.getPrimaryKey());
                     //
                     Sysstat diffStat = currStat.minusPerSecond(prevStat);
-                    if (diffStat.getVALUE().abs().longValue() > 10)
+                    if (diffStat.getVALUE().abs().longValue() > 10) {
                         diffStats.add(diffStat);
+                    }
                 }
             }
-
             //
             {
                 //
@@ -121,7 +123,6 @@ public class OracleSysstatMonitor {
                 output[0][0] = "INST_ID";
                 output[1][0] = "NAME";
                 output[2][0] = "VALUE";
-
                 //
                 int counter = 1;
                 for (Sysstat diffEvent : diffStats) {
@@ -229,7 +230,8 @@ public class OracleSysstatMonitor {
                         , getNAME()
                         , getVALUE().subtract(prevStat.getVALUE()).divide(seconds, RoundingMode.HALF_UP)
                 );
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 Log.println("1: " + getVALUE().toPlainString());
                 Log.println("2: " + prevStat.getVALUE().toPlainString());
                 Log.println("3: " + seconds.toPlainString());

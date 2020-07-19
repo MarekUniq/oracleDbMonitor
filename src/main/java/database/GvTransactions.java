@@ -5,7 +5,13 @@ import common.Log;
 import common.Str;
 
 import java.sql.ResultSet;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  *
@@ -15,7 +21,6 @@ class GvTransactions {
     private static final SortedMap<String, GvTransaction> transactionsMapByPrimaryKey = new TreeMap<>();
     // Set sorted by start_date desc
     private static final SortedSet<GvTransaction> transactionsSetByStartDateDesc = new TreeSet<>(new ComparatorByStartDateDesc());
-
     //
     private static long fetchTime;
 
@@ -46,7 +51,6 @@ class GvTransactions {
             Log.println(oldTransaction.getPrimaryKey());
             throw new RuntimeException("duplicate value");
         }
-
         //
         if (!transactionsSetByStartDateDesc.add(transaction)) {
             throw new RuntimeException("duplicate value");
@@ -61,13 +65,15 @@ class GvTransactions {
             GvSession session = GvSessions.getSessionsMapBySAddr().get(sessAddrKey);
             //
             if (session != null) {
-                if (transaction.getGvSession() == null)
+                if (transaction.getGvSession() == null) {
                     transaction.setGvSession(session);
-                else
+                }
+                else {
                     throw new RuntimeException("duplicate mapping: " + transaction.getPrimaryKey()
-                            + " : " + session.getPrimaryKey()
-                            + " : " + transaction.getGvSession().getPrimaryKey()
+                                               + " : " + session.getPrimaryKey()
+                                               + " : " + transaction.getGvSession().getPrimaryKey()
                     );
+                }
             }
         }
     }
@@ -77,11 +83,11 @@ class GvTransactions {
     public static void getOutputTransaction(StringBuffer sb) {
         //
         int maxTransactionsRows = CommandLineArgument.getMaxTransactionsRows();
-        if (maxTransactionsRows <= 0)
+        if (maxTransactionsRows <= 0) {
             return;
+        }
         //
         List<GvTransaction> transactionList = new ArrayList<>(transactionsSetByStartDateDesc);
-
         //
         // Math.min() allows to restrict # of lines if there are too many
         int rowCount = 1 + Math.min(transactionList.size(), maxTransactionsRows);
@@ -91,7 +97,6 @@ class GvTransactions {
         int colNum = 0;
         int rowNum = 0;
         String[][] transactionArray = new String[columnCount][rowCount];
-
         // Column Names
         alignment[colNum] = Str.ALIGNMENT_LEFT;
         transactionArray[colNum++][rowNum] = "SES_REF";
@@ -113,7 +118,6 @@ class GvTransactions {
         transactionArray[colNum++][rowNum] = GvSession.columnNames[GvSession.USERNAME];
         alignment[colNum] = Str.ALIGNMENT_LEFT;
         transactionArray[colNum++][rowNum] = GvSession.columnNames[GvSession.EVENT];
-
         // Column Values
         for (int i = 0; i < (rowCount - 1); i++) {
             GvTransaction transaction = transactionList.get(i);
@@ -130,19 +134,17 @@ class GvTransactions {
             transactionArray[colNum++][rowNum] = Str.formatDoubleNumber(transaction.getCrChange().doubleValue());
             transactionArray[colNum++][rowNum] = session == null ? "?" : session.getUsername();
             transactionArray[colNum++][rowNum] = session == null ? "?" : session.getEvent();
-//      transactionArray[colNum++][rowNum] = Str.rtrunc(transaction.getMachine(), 15);
+            //      transactionArray[colNum++][rowNum] = Str.rtrunc(transaction.getMachine(), 15);
         }
-
         //
         sb.append("Transactions: " + transactionsMapByPrimaryKey.size()
-                + ((maxTransactionsRows == Integer.MAX_VALUE) ? "" : " limit: " + maxTransactionsRows)
-                + " / gv$transaction"
-                + " (" + getFetchTime() + "ms)");
+                  + ((maxTransactionsRows == Integer.MAX_VALUE) ? "" : " limit: " + maxTransactionsRows)
+                  + " / gv$transaction"
+                  + " (" + getFetchTime() + "ms)");
         sb.append(Log.EOL);
         Str.convertArrayToStringBufferAsTable(transactionArray, alignment, sb);
         sb.append(Log.EOL);
     }
-
 
     //
     //
@@ -152,10 +154,12 @@ class GvTransactions {
         public int compare(GvTransaction o1, GvTransaction o2) {
             int result = Integer.valueOf(o2.getStartDate()).compareTo(o1.getStartDate());
             //
-            if (result != 0)
+            if (result != 0) {
                 return result;
-            else
+            }
+            else {
                 return o2.getPrimaryKey().compareTo(o1.getPrimaryKey());
+            }
         }
     }
 

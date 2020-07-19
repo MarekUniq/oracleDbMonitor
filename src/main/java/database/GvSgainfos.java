@@ -10,10 +10,8 @@ import java.util.TreeMap;
  *
  */
 class GvSgainfos {
-
     // map sorted by primary key inst_id
     private static final SortedMap<String, GvSgainfo> instancesMapByPrimaryKey = new TreeMap<>();
-
     //
     private static long fetchTime;
 

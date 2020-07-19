@@ -15,5 +15,5 @@ project.sourceCompatibility = JavaVersion.VERSION_1_8
 dependencies {
     String LIB_JDBC = "${System.env.ORACLE_HOME_190}/jdbc/lib/ojdbc8.jar"
     println "jdbc library: [${LIB_JDBC}]"
-    implementation files( "${LIB_JDBC}")
+    implementation files("${LIB_JDBC}")
 }

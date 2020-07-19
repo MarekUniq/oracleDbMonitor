@@ -10,7 +10,7 @@ import java.sql.ResultSet;
  */
 class GvSessionLongop {
     //  select 'static final int ' ||  column_name || ' = ' || rownum || ';'  from (
-//   select column_name from dba_tab_cols where table_name like 'GV_$SESSION_LONGOPS' order by column_id )
+    //   select column_name from dba_tab_cols where table_name like 'GV_$SESSION_LONGOPS' order by column_id )
     enum COLUMNS {
         ROWNUM_FOR_PK("ROWNUM_FOR_PK") //
         , INST_ID("INST_ID"), SID("SID"), SERIAL("SERIAL#"), OPNAME("OPNAME"), TARGET("TARGET")
@@ -22,7 +22,6 @@ class GvSessionLongop {
         , SQL_ID("SQL_ID")
         // SQL_PLAN_HASH_VALUE,  SQL_EXEC_START, SQL_EXEC_ID, SQL_PLAN_LINE_ID, SQL_PLAN_OPERATION, SQL_PLAN_OPTIONS, QCSID
         ;
-
         //
         private String columnName;
 
@@ -37,7 +36,7 @@ class GvSessionLongop {
 
     //
     //  select 'private String ' ||  replace(replace( substr(lower(column_name),1,1) || substr(initcap(column_name),2), '_',''), '#','') || ';            // '
-//    ||  data_type from dba_tab_cols where table_name like 'GV_$SESSION_LONGOPS' order by column_id
+    //    ||  data_type from dba_tab_cols where table_name like 'GV_$SESSION_LONGOPS' order by column_id
     private int rownumForPk;            // NUMBER
     private String instId;            // NUMBER
     private String sid;            // NUMBER
@@ -51,23 +50,22 @@ class GvSessionLongop {
     //  private String startTime;            // DATE
     private int startTime;            // DATE
     //  private String lastUpdateTime;            // DATE
-//  private String timestamp;            // DATE
+    //  private String timestamp;            // DATE
     private long timeRemaining;            // NUMBER
     //  private String elapsedSeconds;            // NUMBER
-//  private String context;            // NUMBER
-//  private String message;            // VARCHAR2
-//  private String username;            // VARCHAR2
-//  private String sqlAddress;            // RAW
-//  private String sqlHashValue;            // NUMBER
+    //  private String context;            // NUMBER
+    //  private String message;            // VARCHAR2
+    //  private String username;            // VARCHAR2
+    //  private String sqlAddress;            // RAW
+    //  private String sqlHashValue;            // NUMBER
     private String sqlId;            // VARCHAR2
-//  private String sqlPlanHashValue;            // NUMBER
-//  private String sqlExecStart;            // DATE
-//  private String sqlExecId;            // NUMBER
-//  private String sqlPlanLineId;            // NUMBER
-//  private String sqlPlanOperation;            // VARCHAR2
-//  private String sqlPlanOptions;            // VARCHAR2
-//  private String qcsid;            // NUMBER
-
+    //  private String sqlPlanHashValue;            // NUMBER
+    //  private String sqlExecStart;            // DATE
+    //  private String sqlExecId;            // NUMBER
+    //  private String sqlPlanLineId;            // NUMBER
+    //  private String sqlPlanOperation;            // VARCHAR2
+    //  private String sqlPlanOptions;            // VARCHAR2
+    //  private String qcsid;            // NUMBER
 
     public int getRownumForPk() {
         return rownumForPk;
@@ -166,7 +164,7 @@ class GvSessionLongop {
     }
 
     //  select 'set' ||  replace(initcap( column_name),'_','') || '(rs.getString(getColumnName('||column_name||')));'  from (
-//   select column_name from dba_tab_cols where table_name like 'GV_$SESSION_LONGOPS' order by column_id )
+    //   select column_name from dba_tab_cols where table_name like 'GV_$SESSION_LONGOPS' order by column_id )
     public GvSessionLongop(ResultSet rs) throws Exception {
         setRownumForPk(rs.getInt(COLUMNS.ROWNUM_FOR_PK.getColumnName()));
         setInstId(rs.getString(COLUMNS.INST_ID.getColumnName()));
@@ -174,28 +172,28 @@ class GvSessionLongop {
         setSerial(rs.getString(COLUMNS.SERIAL.getColumnName()));
         setOpname(rs.getString(COLUMNS.OPNAME.getColumnName()));
         setTarget(rs.getString(COLUMNS.TARGET.getColumnName()));
-//    setTargetDesc(rs.getString(getColumnName(TARGET_DESC)));
+        //    setTargetDesc(rs.getString(getColumnName(TARGET_DESC)));
         setSofar(rs.getBigDecimal(COLUMNS.SOFAR.getColumnName()));
         setTotalwork(rs.getBigDecimal(COLUMNS.TOTALWORK.getColumnName()));
         setUnits(rs.getString(COLUMNS.UNITS.getColumnName()));
         setStartTime(rs.getInt(COLUMNS.START_TIME.getColumnName()));
-//    setLastUpdateTime(rs.getString(getColumnName(LAST_UPDATE_TIME)));
-//    setTimestamp(rs.getString(getColumnName(TIMESTAMP)));
+        //    setLastUpdateTime(rs.getString(getColumnName(LAST_UPDATE_TIME)));
+        //    setTimestamp(rs.getString(getColumnName(TIMESTAMP)));
         setTimeRemaining(rs.getLong(COLUMNS.TIME_REMAINING.getColumnName()));
-//    setElapsedSeconds(rs.getString(getColumnName(ELAPSED_SECONDS)));
-//    setContext(rs.getString(getColumnName(CONTEXT)));
-//    setMessage(rs.getString(getColumnName(MESSAGE)));
-//    setUsername(rs.getString(getColumnName(USERNAME)));
-//    setSqlAddress(rs.getString(getColumnName(SQL_ADDRESS)));
-//    setSqlHashValue(rs.getString(getColumnName(SQL_HASH_VALUE)));
+        //    setElapsedSeconds(rs.getString(getColumnName(ELAPSED_SECONDS)));
+        //    setContext(rs.getString(getColumnName(CONTEXT)));
+        //    setMessage(rs.getString(getColumnName(MESSAGE)));
+        //    setUsername(rs.getString(getColumnName(USERNAME)));
+        //    setSqlAddress(rs.getString(getColumnName(SQL_ADDRESS)));
+        //    setSqlHashValue(rs.getString(getColumnName(SQL_HASH_VALUE)));
         setSqlId(rs.getString(COLUMNS.SQL_ID.getColumnName()));
-//    setSqlPlanHashValue(rs.getString(getColumnName(SQL_PLAN_HASH_VALUE)));
-//    setSqlExecStart(rs.getString(getColumnName(SQL_EXEC_START)));
-//    setSqlExecId(rs.getString(getColumnName(SQL_EXEC_ID)));
-//    setSqlPlanLineId(rs.getString(getColumnName(SQL_PLAN_LINE_ID)));
-//    setSqlPlanOperation(rs.getString(getColumnName(SQL_PLAN_OPERATION)));
-//    setSqlPlanOptions(rs.getString(getColumnName(SQL_PLAN_OPTIONS)));
-//    setQcsid(rs.getString(getColumnName(QCSID)));
+        //    setSqlPlanHashValue(rs.getString(getColumnName(SQL_PLAN_HASH_VALUE)));
+        //    setSqlExecStart(rs.getString(getColumnName(SQL_EXEC_START)));
+        //    setSqlExecId(rs.getString(getColumnName(SQL_EXEC_ID)));
+        //    setSqlPlanLineId(rs.getString(getColumnName(SQL_PLAN_LINE_ID)));
+        //    setSqlPlanOperation(rs.getString(getColumnName(SQL_PLAN_OPERATION)));
+        //    setSqlPlanOptions(rs.getString(getColumnName(SQL_PLAN_OPTIONS)));
+        //    setQcsid(rs.getString(getColumnName(QCSID)));
     }
 
     public String getGvSessionPrimaryKey() {
@@ -209,7 +207,9 @@ class GvSessionLongop {
     public String getSofarPercent() {
         if (getSofar() != null && getTotalwork() != null && getTotalwork().doubleValue() > 0d) {
             return Str.formatDoubleNumber(100 * getSofar().doubleValue() / getTotalwork().doubleValue()) + "%";
-        } else
+        }
+        else {
             return "?";
+        }
     }
 }

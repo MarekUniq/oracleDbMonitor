@@ -7,14 +7,21 @@ import common.Str;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Comparator;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  *
  */
 public class OracleSystemEventMonitor {
-
     //
     private Connection c;
 
@@ -37,23 +44,22 @@ public class OracleSystemEventMonitor {
         final int interval = CommandLineArgument.getUpdateInterval();
         PreparedStatement ps;
         String sql;
-
         //
         if (CommandLineArgument.getSid() > 0) {
             Log.println("GV$SESSION_EVENT based monitoring: " + CommandLineArgument.ARGS.SID + ": " + CommandLineArgument.getSid() + " " + CommandLineArgument.ARGS.INST_ID + ": " + CommandLineArgument.getInstId());
             sql = "SELECT SYSDATE, INST_ID, SID ||' ' || EVENT EVENT, TOTAL_WAITS, TOTAL_TIMEOUTS, TIME_WAITED_MICRO, 0 TOTAL_WAITS_FG, 0 TOTAL_TIMEOUTS_FG, 0 TIME_WAITED_MICRO_FG, WAIT_CLASS FROM GV$SESSION_EVENT WHERE WAIT_CLASS <> 'Idle' AND SID = " + CommandLineArgument.getSid();
             //
-            if (CommandLineArgument.getInstId() > 0)
+            if (CommandLineArgument.getInstId() > 0) {
                 sql += " AND INST_ID = " + CommandLineArgument.getInstId();
-        } else {
+            }
+        }
+        else {
             Log.println("GV$SYSTEM_EVENT based monitoring");
             sql = "SELECT SYSDATE, INST_ID, EVENT, TOTAL_WAITS, TOTAL_TIMEOUTS, TIME_WAITED_MICRO, TOTAL_WAITS_FG, TOTAL_TIMEOUTS_FG, TIME_WAITED_MICRO_FG, WAIT_CLASS FROM GV$SYSTEM_EVENT WHERE WAIT_CLASS <> 'Idle'";
         }
-
         //
         Log.println("SQL: " + sql);
         ps = c.prepareStatement(sql);
-
         //
         SystemEvents ePrev;
         SystemEvents eCurr;
@@ -61,11 +67,13 @@ public class OracleSystemEventMonitor {
         ResultSet rs = null;
         try {
             rs = ps.executeQuery();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             if (CommandLineArgument.getSid() > 0) {
                 // no fallback for session based monitoring
                 throw e;
-            } else {
+            }
+            else {
                 // fallback for system based monitoring
                 Log.println("Fallback to columns without Foreground Waits");
                 ps = c.prepareStatement("SELECT SYSDATE, INST_ID, EVENT, TOTAL_WAITS, TOTAL_TIMEOUTS, TIME_WAITED_MICRO, 0 TOTAL_WAITS_FG, 0 TOTAL_TIMEOUTS_FG, 0 TIME_WAITED_MICRO_FG, WAIT_CLASS FROM GV$SYSTEM_EVENT WHERE WAIT_CLASS <> 'Idle'");
@@ -74,7 +82,6 @@ public class OracleSystemEventMonitor {
         }
         ePrev = new SystemEvents(rs);
         Thread.sleep(interval);
-
         //
         while (true) {
             rs = ps.executeQuery();
@@ -112,7 +119,6 @@ public class OracleSystemEventMonitor {
                     return retVal == 0 ? o1.getPrimaryKey().compareTo(o2.getPrimaryKey()) : retVal;
                 }
             });
-
             //
             {
                 for (SystemEvent currEvent : events.values()) {
@@ -120,11 +126,11 @@ public class OracleSystemEventMonitor {
                     SystemEvent prevEvent = ePrev.getEventByPrimaryKey(currEvent.getPrimaryKey());
                     //
                     SystemEvent diffEvent = currEvent.minusPerSecond(prevEvent);
-                    if (diffEvent.getTOTAL_WAITS().intValue() > 0)
+                    if (diffEvent.getTOTAL_WAITS().intValue() > 0) {
                         diffEvents.add(diffEvent);
+                    }
                 }
             }
-
             //
             {
                 //
@@ -139,44 +145,45 @@ public class OracleSystemEventMonitor {
                 output[7][0] = "FG%";
                 output[8][0] = "WAIT_CLASS";
                 output[9][0] = "TIME_WAITED";
-//
-//          TOTAL_TIMEOUTS
-//        TIME_WAITED_MICRO
-//          TOTAL_WAITS_FG
-//        TOTAL_TIMEOUTS_FG
-//          TIME_WAITED_MICRO_FG
-//        WAIT_CLASS
+                //
+                //          TOTAL_TIMEOUTS
+                //        TIME_WAITED_MICRO
+                //          TOTAL_WAITS_FG
+                //        TOTAL_TIMEOUTS_FG
+                //          TIME_WAITED_MICRO_FG
+                //        WAIT_CLASS
                 // header
-
                 //
                 int counter = 1;
                 for (SystemEvent diffEvent : diffEvents) {
                     output[0][counter] = Str.formatDoubleNumber(diffEvent.getINST_ID().doubleValue());
                     output[1][counter] = diffEvent.getEVENT();
                     output[2][counter] = Str.formatDoubleNumber(diffEvent.getTOTAL_WAITS().doubleValue());
-
-                    if (diffEvent.getTOTAL_WAITS().intValue() == 0)
+                    if (diffEvent.getTOTAL_WAITS().intValue() == 0) {
                         output[3][counter] = "-";
-                    else
+                    }
+                    else {
                         output[3][counter] = Str.formatDoubleNumber((100d * diffEvent.getTOTAL_WAITS_FG().doubleValue() / diffEvent.getTOTAL_WAITS().doubleValue()));
-
-                    if (diffEvent.getTOTAL_WAITS().intValue() == 0)
+                    }
+                    if (diffEvent.getTOTAL_WAITS().intValue() == 0) {
                         output[4][counter] = "-";
-                    else
+                    }
+                    else {
                         output[4][counter] = Str.formatDoubleNumber(diffEvent.getTIME_WAITED_MICRO().doubleValue() / diffEvent.getTOTAL_WAITS().doubleValue() / 1000000d);
-
-                    if (diffEvent.getTIME_WAITED_MICRO().intValue() == 0)
+                    }
+                    if (diffEvent.getTIME_WAITED_MICRO().intValue() == 0) {
                         output[5][counter] = "-";
-                    else
+                    }
+                    else {
                         output[5][counter] = Str.formatDoubleNumber(100d * diffEvent.getTIME_WAITED_MICRO_FG().doubleValue() / diffEvent.getTIME_WAITED_MICRO().doubleValue());
-
+                    }
                     output[6][counter] = Str.formatDoubleNumber(diffEvent.getTOTAL_TIMEOUTS().doubleValue());
-
-                    if (diffEvent.getTOTAL_TIMEOUTS().intValue() == 0)
+                    if (diffEvent.getTOTAL_TIMEOUTS().intValue() == 0) {
                         output[7][counter] = "-";
-                    else
+                    }
+                    else {
                         output[7][counter] = Str.formatDoubleNumber((100d * diffEvent.getTOTAL_TIMEOUTS_FG().doubleValue() / diffEvent.getTOTAL_TIMEOUTS().doubleValue()));
-
+                    }
                     output[8][counter] = diffEvent.getWAIT_CLASS();
                     output[9][counter] = Str.formatDoubleNumber(diffEvent.getTIME_WAITED_MICRO().doubleValue() / 1000d / 1000d);
                     //
@@ -356,7 +363,8 @@ public class OracleSystemEventMonitor {
                         , getTIME_WAITED_MICRO_FG().divide(seconds, RoundingMode.HALF_UP)
                         , getWAIT_CLASS()
                 );
-            } else {
+            }
+            else {
                 BigDecimal seconds = new BigDecimal((getSYSDATE().getTime() - prevEvent.getSYSDATE().getTime()) / 1000d);
                 diffEvent = new SystemEvent(
                         getSYSDATE()

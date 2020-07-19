@@ -6,7 +6,6 @@ import java.sql.ResultSet;
  *
  */
 class GvParameter {
-
     //
     private String instId;            // NUMBER
     private NAME name;            // VARCHAR2

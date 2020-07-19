@@ -7,7 +7,6 @@ import java.sql.ResultSet;
  *
  */
 class GvPgastat {
-
     //
     private String instId;     // NUMBER
     private NAME name;       // VARCHAR2

@@ -14,7 +14,6 @@ import java.util.Date;
  *
  */
 public class ReadTelnetSocket {
-
     //
     private static String logFileSuffix;
 
@@ -27,11 +26,11 @@ public class ReadTelnetSocket {
         if (args.length > 0) {
             serverAddr = args[0];
             Log.errPrintln("Argument 1: hostname / ip address: " + serverAddr);
-        } else {
+        }
+        else {
             Log.errPrintln("Argument 1: hostname / ip address: " + "[is missing]");
             System.exit(-1);
         }
-
         //
         String serverPortString = null;
         int serverPort = -1;
@@ -39,30 +38,30 @@ public class ReadTelnetSocket {
             serverPortString = args[1];
             Log.errPrintln("Argument 2: port: " + serverPortString);
             serverPort = Integer.parseInt(serverPortString);
-        } else {
+        }
+        else {
             Log.errPrintln("Argument 2: port: " + "[is missing]");
             System.exit(-1);
         }
-
         //
         if (args.length > 2) {
             logFileSuffix = args[2];
             Log.errPrintln("Argument 3: logFileSuffix: " + logFileSuffix);
-        } else {
+        }
+        else {
             Log.errPrintln("Argument 3: logFileSuffix: [is missing]");
             System.exit(-1);
         }
-
         //
         Socket socket = new Socket(serverAddr, serverPort);
         //
         InputStream inputStream = socket.getInputStream();
-
         byte[] buf = new byte[512];
         while (true) {
             int length = inputStream.read(buf);
-            if (length < 0)
+            if (length < 0) {
                 break;
+            }
             //
             write(buf, 0, length);
         }

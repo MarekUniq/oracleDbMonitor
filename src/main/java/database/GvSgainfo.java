@@ -7,7 +7,6 @@ import java.sql.ResultSet;
  *
  */
 class GvSgainfo {
-
     //
     private String instId;     // NUMBER
     private NAME name;       // VARCHAR2
@@ -66,7 +65,6 @@ class GvSgainfo {
     public void setBytes(BigDecimal bytes) {
         this.bytes = bytes;
     }
-
 
     //
     //

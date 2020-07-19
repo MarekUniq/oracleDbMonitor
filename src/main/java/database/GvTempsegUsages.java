@@ -14,12 +14,10 @@ import java.util.TreeMap;
  *
  */
 class GvTempsegUsages {
-
     // map sorted by primary key session_addr@inst_id
     private static final SortedMap<String, GvTempsegUsage> tempsegUsageMapByPrimaryKey = new TreeMap<>();
     //
     private static long fetchTime;
-
 
     public static void setFetchTime(long fetchTime) {
         GvTempsegUsages.fetchTime = fetchTime;
@@ -44,7 +42,7 @@ class GvTempsegUsages {
         if (oldTempsegUsage != null) {
             Log.println("new: " + tempsegUsage.getPrimaryKey());
             Log.println("old: " + oldTempsegUsage.getPrimaryKey());
-//      throw new RuntimeException("duplicate value");
+            //      throw new RuntimeException("duplicate value");
             Log.println("Warning: addTempsegUsage() - duplicate value");
         }
     }
@@ -56,13 +54,15 @@ class GvTempsegUsages {
             GvSession session = GvSessions.getSessionsMapBySAddr().get(sessAddrKey);
             //
             if (session != null) {
-                if (tempsegUsage.getGvSession() == null)
+                if (tempsegUsage.getGvSession() == null) {
                     tempsegUsage.setGvSession(session);
-                else
+                }
+                else {
                     throw new RuntimeException("duplicate mapping: " + tempsegUsage.getPrimaryKey()
-                            + " : " + session.getPrimaryKey()
-                            + " : " + tempsegUsage.getGvSession().getPrimaryKey()
+                                               + " : " + session.getPrimaryKey()
+                                               + " : " + tempsegUsage.getGvSession().getPrimaryKey()
                     );
+                }
             }
         }
     }
@@ -71,12 +71,11 @@ class GvTempsegUsages {
     public static void getOutputTempsegUsage(StringBuffer sb) {
         //
         int maxTempSegmentUsageRows = CommandLineArgument.getMaxTempSegmentUsageRows();
-        if (maxTempSegmentUsageRows <= 0)
+        if (maxTempSegmentUsageRows <= 0) {
             return;
-
+        }
         //
         List<GvTempsegUsage> tempsegUsageList = new ArrayList<>(tempsegUsageMapByPrimaryKey.values());
-
         //
         // Math.min() allows to restrict # of lines if there are too many
         int rowCount = 1 + Math.min(tempsegUsageList.size(), maxTempSegmentUsageRows);
@@ -86,7 +85,6 @@ class GvTempsegUsages {
         int colNum = 0;
         int rowNum = 0;
         String[][] tempsegArray = new String[columnCount][rowCount];
-
         // Column Names
         alignment[colNum] = Str.ALIGNMENT_LEFT;
         tempsegArray[colNum++][rowNum] = "SES_REF";
@@ -106,7 +104,6 @@ class GvTempsegUsages {
         tempsegArray[colNum++][rowNum] = GvSession.columnNames[GvSession.LAST_CALL_ET];
         alignment[colNum] = Str.ALIGNMENT_LEFT;
         tempsegArray[colNum++][rowNum] = GvSession.columnNames[GvSession.EVENT];
-
         // Column Values
         for (int i = 0; i < (rowCount - 1); i++) {
             GvTempsegUsage tempsegUsage = tempsegUsageList.get(i);
@@ -123,12 +120,11 @@ class GvTempsegUsages {
             tempsegArray[colNum++][rowNum] = session == null ? "?" : Str.formatSecondsNumber(session.getLastCallEt());
             tempsegArray[colNum++][rowNum] = session == null ? "?" : session.getEvent();
         }
-
         //
         sb.append("Temporary Segment Usage: " + tempsegUsageMapByPrimaryKey.size()
-                + ((maxTempSegmentUsageRows == Integer.MAX_VALUE) ? "" : " limit: " + maxTempSegmentUsageRows)
-                + " / gv$tempseg_usage"
-                + " (" + getFetchTime() + "ms)");
+                  + ((maxTempSegmentUsageRows == Integer.MAX_VALUE) ? "" : " limit: " + maxTempSegmentUsageRows)
+                  + " / gv$tempseg_usage"
+                  + " (" + getFetchTime() + "ms)");
         sb.append(Log.EOL);
         Str.convertArrayToStringBufferAsTable(tempsegArray, alignment, sb);
         sb.append(Log.EOL);

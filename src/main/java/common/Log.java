@@ -1,6 +1,5 @@
 package common;
 
-
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,9 +8,7 @@ import java.util.Date;
  *
  */
 public class Log {
-
     public static final String EOL = System.lineSeparator();
-
     //
     private static final SimpleDateFormat s =
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
