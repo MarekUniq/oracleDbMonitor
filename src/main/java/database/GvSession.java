@@ -70,6 +70,7 @@ public class GvSession {
     public static String getColumnName(int columnPosition) {
         return columnNames[columnPosition];
     }
+
     //  select 'private String ' ||  replace(replace( substr(lower(column_name),1,1) || substr(initcap(column_name),2), '_',''), '#','') || ';            // '
     //  ||  data_type from dba_tab_cols where table_name like 'GV_$SESSION' order by column_id
     private String instId;            // NUMBER
@@ -620,4 +621,17 @@ public class GvSession {
         //
         return activeCount;
     }
+
+    // newSessionFlag - if session is new then previous iteration statistics must not be used.
+    // otherwise negative values will be presented
+    private boolean newSessionFlag = false;
+
+    public void setNewSessionFlag() {
+        this.newSessionFlag = true;
+    }
+
+    public boolean isNewSessionFlag() {
+        return newSessionFlag;
+    }
+
 }

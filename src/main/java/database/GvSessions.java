@@ -21,7 +21,9 @@ class GvSessions {
     // map sorted by primary key sid,serial#,@inst_id
     private static final SortedMap<String, GvSession> sessionsMapByPrimaryKey = new TreeMap<>();
     // map sorted by short primary key sid,@inst_id
-    private static final SortedMap<String, GvSession> sessionsMapByPrimaryKeyShort = new TreeMap<>();
+    private static SortedMap<String, GvSession> sessionsMapByPrimaryKeyShort = new TreeMap<>();
+    // helps to detect new sessions which have same sid,@inst_id combination
+    private static SortedMap<String, GvSession> sessionsMapByPrimaryKeyShortPrevious = new TreeMap<>();
     // map sorted by SADDR@inst_id
     private static final SortedMap<String, GvSession> sessionsMapBySAddr = new TreeMap<>();
     // Set sorted by last_call_et
@@ -49,19 +51,21 @@ class GvSessions {
 
     //
     public static void clear() {
+        // current -> previous
+        sessionsMapByPrimaryKeyShortPrevious = sessionsMapByPrimaryKeyShort;
+        // clear current
         sessionsMapByPrimaryKey.clear();
-        sessionsMapByPrimaryKeyShort.clear();
+        sessionsMapByPrimaryKeyShort = new TreeMap<>();
         sessionsSetByLastCallEtDesc.clear();
         sessionsMapBySAddr.clear();
-        //
     }
 
     //
     public static void addSession(ResultSet rs) throws Exception {
-        //
+        // build new object
         GvSession session = new GvSession(rs);
         GvSession oldSession;
-        //
+        // order by primary key
         String key = session.getPrimaryKey();
         oldSession = sessionsMapByPrimaryKey.put(key, session);
         if (oldSession != null) {
@@ -69,7 +73,7 @@ class GvSessions {
             Log.println(oldSession.getPrimaryKey());
             throw new RuntimeException("duplicate value");
         }
-        //
+        // order by short primary key
         String keyShort = session.getPrimaryKeyShort();
         oldSession = sessionsMapByPrimaryKeyShort.put(keyShort, session);
         if (oldSession != null) {
@@ -77,11 +81,19 @@ class GvSessions {
             Log.println(oldSession.getPrimaryKey());
             throw new RuntimeException("duplicate value");
         }
-        //
+        // find previous iteration session
+        oldSession = sessionsMapByPrimaryKeyShortPrevious.get(keyShort);
+        if (oldSession != null) {
+            if (!session.getLogonTime().equals(oldSession.getLogonTime())) {
+                Log.println(String.format("New Session, same sid: [%s] [%s] [%s] [%s]", session.getPrimaryKey(), session.getLogonTime(), oldSession.getPrimaryKey(), oldSession.getLogonTime()));
+                session.setNewSessionFlag();
+            }
+        }
+        // order by last_call_et
         if (!sessionsSetByLastCallEtDesc.add(session)) {
             throw new RuntimeException("duplicate value");
         }
-        //
+        // order by saddr
         String saddrKey = session.getPrimaryKeySaddr();
         oldSession = sessionsMapBySAddr.put(saddrKey, session);
         if (oldSession != null) {

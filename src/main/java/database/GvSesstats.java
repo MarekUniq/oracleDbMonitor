@@ -45,7 +45,7 @@ class GvSesstats {
         GvSesstat gvSesstat = sesstatsMapByPrimaryKey.get(primaryKey);
         //
         if (gvSesstat != null) {
-            gvSesstat.setNextValue(value);
+            gvSesstat.setValue(value);
         }
         else {
             gvSesstat = new GvSesstat(instId, sid, statistic, value);
@@ -100,13 +100,22 @@ class GvSesstats {
         String primaryKey = GvSesstat.getPrimaryKey(session.getInstId(), session.getSid(), statistic);
         GvSesstat gvSesstat = sesstatsMapByPrimaryKey.get(primaryKey);
         //
-        if (GvStatnames.CPU_USED_BY_THIS_SESSION.equals(statisticsName))
-        // CPU time is reported "in 10s of milliseconds"
-        {
-            return gvSesstat == null ? 0 : (double)gvSesstat.getValueDiff() / interval / 100;
+        double value;
+        if (session.isNewSessionFlag()) {
+            // for new sessions take value
+            value = gvSesstat == null ? 0d : gvSesstat.getValue();
         }
         else {
-            return gvSesstat == null ? 0 : (double)gvSesstat.getValueDiff() / interval;
+            // for old sessions take diff
+            value = gvSesstat == null ? 0d : gvSesstat.getValueDiff();
+        }
+        //
+        if (GvStatnames.CPU_USED_BY_THIS_SESSION.equals(statisticsName)) {
+            // CPU time is reported "in 10s of milliseconds"
+            return value / interval / 100d;
+        }
+        else {
+            return value / interval;
         }
     }
 

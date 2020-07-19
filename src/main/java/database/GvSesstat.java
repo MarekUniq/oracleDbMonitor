@@ -5,14 +5,13 @@ package database;
  */
 class GvSesstat {
     //
-    private String instId;
-    private String sid;
-    private String statistic;
+    private final String instId;
+    private final String sid;
+    private final String statistic;
     private long value;
+    private long valuePrevious;
     //
-    private long valueDiff;
-    //
-    long updateCounter;
+    private long updateCounter;
 
     //
     public long getValue() {
@@ -20,15 +19,12 @@ class GvSesstat {
     }
 
     public void setValue(long value) {
+        this.valuePrevious = this.value;
         this.value = value;
     }
 
     public long getValueDiff() {
-        return valueDiff;
-    }
-
-    public void setValueDiff(long valueDiff) {
-        this.valueDiff = valueDiff;
+        return this.value - this.valuePrevious;
     }
 
     public long getUpdateCounter() {
@@ -54,11 +50,6 @@ class GvSesstat {
 
     String getPrimaryKey() {
         return getPrimaryKey(instId, sid, statistic);
-    }
-
-    public void setNextValue(long nextValue) {
-        setValueDiff(nextValue - getValue());
-        setValue(nextValue);
     }
 
 }
