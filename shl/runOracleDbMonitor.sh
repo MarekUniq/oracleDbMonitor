@@ -13,7 +13,7 @@ fi
 #
 # java environment
 if [[ -z "${JAVA_HOME}" ]] ; then
-  JAVA_HOME="${HOME}/tools/jdk1.8"
+  JAVA_HOME="${HOME}/tools/openjdk1.8"
 fi
 
 #

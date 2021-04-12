@@ -19,7 +19,7 @@ echo  "# ORACLE_HOME_190=${ORACLE_HOME_190}"
 # java environment
 echo  "${JAVA_HOME}"
 if [[ -z "${JAVA_HOME}" ]] ; then
-  export JAVA_HOME="${HOME}/tools/jdk1.8"
+  export JAVA_HOME="${HOME}/tools/openjdk1.8"
 fi
 echo  "# JAVA_HOME=${JAVA_HOME}"
 
